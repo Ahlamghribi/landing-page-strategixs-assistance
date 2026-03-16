@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategix Assistance — Déblocage Administratif</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --b1:#1A2EFF;--b2:#4361FF;--b3:#6B8AFF;
+  --c1:#00C8FF;--c2:#00E5FF;
+  --v1:#7C1FFF;--v2:#A855F7;
+  --pk:#FF1F6E;
+  --dk:#04060F;--dk2:#070B1A;--dk3:#0A0F22;--dk4:#0D1228;
+  --gy:rgba(255,255,255,.06);
+  --bdr:rgba(255,255,255,.08);
+  --txt:rgba(255,255,255,.55);
+  --r:16px;
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Poppins',sans-serif;background:var(--dk);color:#fff;overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
+
+/* ─── CURSOR ─── */
+#cur,#cur2{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
+#cur{width:8px;height:8px;background:var(--c1)}
+#cur2{width:36px;height:36px;border:1px solid rgba(0,200,255,.35);z-index:9998;transition:transform .4s cubic-bezier(.23,1,.32,1)}
+.hoverable{cursor:none}
+
+/* ─── NAV ─── */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:0 60px;height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(4,6,15,.6);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+  border-bottom:1px solid rgba(99,138,255,.1);
+  transition:all .35s;
+}
+.nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none}
+.nav-logo-mark{
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--b1),var(--v1));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 20px rgba(99,138,255,.4);
+}
+.nav-logo-mark svg{width:18px;height:18px}
+.nav-logo-text{line-height:1.2}
+.nav-logo-name{font-size:14px;font-weight:700;color:#fff;letter-spacing:.2px}
+.nav-logo-sub{font-size:9px;font-weight:500;color:rgba(255,255,255,.3);letter-spacing:2.5px;text-transform:uppercase}
+.nav-links{display:flex;gap:32px}
+.nav-links a{font-size:12px;font-weight:500;color:rgba(255,255,255,.45);text-decoration:none;letter-spacing:.5px;transition:.2s;position:relative;padding:4px 0}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--c1);transition:.3s;border-radius:1px}
+.nav-links a:hover{color:#fff}.nav-links a:hover::after{width:100%}
+.nav-btn{
+  padding:9px 24px;border-radius:50px;border:none;cursor:none;
+  font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;letter-spacing:.8px;color:#fff;
+  background:linear-gradient(135deg,var(--b1),var(--v1));
+  box-shadow:0 0 24px rgba(99,138,255,.4);transition:.3s;
+  position:relative;overflow:hidden;
+}
+.nav-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--v1),var(--pk));opacity:0;transition:.3s}
+.nav-btn span{position:relative;z-index:1}
+.nav-btn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(99,138,255,.6)}.nav-btn:hover::before{opacity:1}
+#ham{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px}
+#ham span{display:block;width:22px;height:2px;background:rgba(255,255,255,.7);border-radius:2px;transition:.3s}
+#mob-menu{display:none;position:fixed;inset:0;z-index:499;background:rgba(4,6,15,.97);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:32px}
+#mob-menu.open{display:flex}
+#mob-menu a{font-size:22px;font-weight:700;color:rgba(255,255,255,.7);text-decoration:none;transition:.2s}
+#mob-menu a:hover{color:#fff}
+#mob-menu .nav-btn{font-size:14px;padding:14px 36px}
+
+/* ─── HERO ─── */
+.hero{
+  min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px;
+  padding:100px 60px 80px;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 90% 70% at 60% 30%,rgba(26,46,255,.1) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 60% at 20% 80%,rgba(124,31,255,.07) 0%,transparent 55%),
+             var(--dk);
+}
+#hero-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hero-grid-lines{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(99,138,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(99,138,255,.04) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);
+}
+.hero-left{position:relative;z-index:2}
+.hero-chip{
+  display:inline-flex;align-items:center;gap:9px;
+  background:rgba(0,200,255,.07);border:1px solid rgba(0,200,255,.2);
+  color:var(--c2);padding:7px 18px;border-radius:50px;
+  font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:28px;
+}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:var(--c1);animation:chipPulse 2s infinite;flex-shrink:0}
+@keyframes chipPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,200,255,.6)}50%{box-shadow:0 0 0 6px rgba(0,200,255,0)}}
+.hero h1{font-size:clamp(36px,4.5vw,64px);font-weight:900;line-height:1.05;margin-bottom:20px;letter-spacing:-1px}
+.hero h1 .t1{display:block;color:#fff}
+.hero h1 .t2{display:block;background:linear-gradient(90deg,var(--b2),var(--c1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero h1 .t3{display:block;background:linear-gradient(90deg,var(--v1),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:15px;font-weight:400;color:var(--txt);line-height:1.8;max-width:440px;margin-bottom:40px}
+.hero-sub strong{color:rgba(255,255,255,.85);font-weight:600}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:52px}
+.btn-grad{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 32px;border-radius:50px;border:none;cursor:none;
+  font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:#fff;letter-spacing:.3px;
+  background:linear-gradient(135deg,var(--b1),var(--v1));
+  box-shadow:0 8px 32px rgba(99,138,255,.4);transition:.35s;position:relative;overflow:hidden;
+}
+.btn-grad::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--v1),var(--pk));opacity:0;transition:.35s}
+.btn-grad>*{position:relative;z-index:1}
+.btn-grad:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(99,138,255,.55)}.btn-grad:hover::before{opacity:1}
+.btn-ghost-hero{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 32px;border-radius:50px;
+  font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,.7);
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
+  cursor:none;transition:.35s;backdrop-filter:blur(10px);
+}
+.btn-ghost-hero:hover{background:rgba(255,255,255,.09);border-color:rgba(0,200,255,.35);color:#fff;transform:translateY(-3px)}
+.hero-kpis{display:flex;gap:0}
+.kpi{padding:0 28px;border-right:1px solid rgba(255,255,255,.08)}
+.kpi:first-child{padding-left:0}.kpi:last-child{border:none;padding-right:0}
+.kpi-n{font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--c1),var(--b2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.kpi-l{font-size:10px;font-weight:500;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:2px;margin-top:4px}
+
+/* ─── 3D CARD ─── */
+.hero-right{position:relative;z-index:2;display:flex;justify-content:center;align-items:center}
+.scene{width:100%;max-width:420px;perspective:1400px;perspective-origin:50% 40%}
+#card3d{
+  transform-style:preserve-3d;
+  transition:transform .08s linear;
+  animation:cardIdle 6s ease-in-out infinite;
+  will-change:transform;
+}
+@keyframes cardIdle{
+  0%,100%{transform:rotateX(4deg) rotateY(-6deg) rotateZ(.5deg)}
+  30%{transform:rotateX(6deg) rotateY(4deg) rotateZ(-.5deg)}
+  60%{transform:rotateX(2deg) rotateY(-2deg) rotateZ(.3deg)}
+}
+.card3d-inner{
+  background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border:1px solid rgba(99,138,255,.25);
+  border-radius:24px;padding:28px;
+  box-shadow:
+    0 60px 120px rgba(0,0,0,.7),
+    0 0 0 1px rgba(255,255,255,.04) inset,
+    0 20px 80px rgba(26,46,255,.15),
+    inset 0 -2px 20px rgba(0,200,255,.04);
+  backdrop-filter:blur(20px);
+  position:relative;overflow:hidden;
+}
+.card3d-inner::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,rgba(0,200,255,.7) 40%,rgba(99,138,255,.7) 70%,transparent 100%);
+}
+.card3d-inner::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(99,138,255,.08),transparent 60%);
+  pointer-events:none;
+}
+.c3-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.c3-id{font-size:11px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.5px}
+.c3-id span{color:var(--c1)}
+.c3-badge{
+  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);
+  color:#4ADE80;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;display:flex;align-items:center;gap:6px;
+}
+.c3-badge-dot{width:5px;height:5px;border-radius:50%;background:#4ADE80;animation:c3pulse 2s infinite}
+@keyframes c3pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.c3-prefecture{font-size:13px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:18px}
+.c3-progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.c3-progress-label{font-size:11px;color:rgba(255,255,255,.4);font-weight:500}
+.c3-progress-pct{font-size:12px;font-weight:700;color:var(--c1)}
+.c3-track{height:5px;background:rgba(255,255,255,.06);border-radius:3px;margin-bottom:22px;overflow:hidden}
+.c3-fill{
+  height:100%;width:85%;border-radius:3px;
+  background:linear-gradient(90deg,var(--b1),var(--c1));
+  position:relative;animation:fillGlow 3s ease-in-out infinite;
+}
+@keyframes fillGlow{0%,100%{box-shadow:0 0 6px rgba(0,200,255,.4)}50%{box-shadow:0 0 18px rgba(0,200,255,.8)}}
+.c3-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+.c3-step{display:flex;align-items:center;gap:12px}
+.c3-icon{
+  width:28px;height:28px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.c3-icon svg{width:13px;height:13px}
+.c3-icon.done{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.2)}
+.c3-icon.done svg{stroke:#4ADE80}
+.c3-icon.active{background:rgba(99,138,255,.15);border:1px solid rgba(99,138,255,.35)}
+.c3-icon.active svg{stroke:var(--c1)}
+.c3-icon.pending{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+.c3-icon.pending svg{stroke:rgba(255,255,255,.25)}
+.c3-step-text{font-size:12px;font-weight:500}
+.c3-step-text.done{color:rgba(255,255,255,.75)}
+.c3-step-text.active{color:var(--c1)}
+.c3-step-text.pending{color:rgba(255,255,255,.25)}
+.c3-cta{
+  width:100%;padding:13px;border-radius:12px;border:none;cursor:none;
+  background:linear-gradient(135deg,var(--b1),var(--v1));
+  color:#fff;font-family:'Poppins',sans-serif;font-size:12px;font-weight:800;
+  letter-spacing:1px;text-transform:uppercase;
+  box-shadow:0 8px 28px rgba(99,138,255,.35);transition:.3s;
+  position:relative;overflow:hidden;
+}
+.c3-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--v1),var(--pk));opacity:0;transition:.3s}
+.c3-cta span{position:relative;z-index:1}
+.c3-cta:hover::before{opacity:1}
+/* Floating mini-cards */
+.mini-card{
+  position:absolute;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;padding:10px 14px;backdrop-filter:blur(12px);
+  display:flex;align-items:center;gap:8px;white-space:nowrap;
+  box-shadow:0 12px 40px rgba(0,0,0,.4);
+}
+.mc1{bottom:-18px;left:-30px;animation:mcFloat1 4s ease-in-out infinite}
+.mc2{top:-10px;right:-24px;animation:mcFloat2 3.5s ease-in-out infinite}
+.mc3{top:45%;right:-70px;animation:mcFloat3 5s ease-in-out infinite;display:none}
+@keyframes mcFloat1{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(1deg)}}
+@keyframes mcFloat2{0%,100%{transform:translateY(0) rotate(2deg)}50%{transform:translateY(8px) rotate(-1.5deg)}}
+@keyframes mcFloat3{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.mc-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mc-icon svg{width:16px;height:16px}
+.mc-icon.green{background:rgba(34,197,94,.15)}.mc-icon.green svg{stroke:#4ADE80}
+.mc-icon.blue{background:rgba(99,138,255,.15)}.mc-icon.blue svg{stroke:var(--c1)}
+.mc-icon.violet{background:rgba(124,31,255,.2)}.mc-icon.violet svg{stroke:var(--v2)}
+.mc-val{font-size:15px;font-weight:800;color:#fff;line-height:1}
+.mc-lbl{font-size:9px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1.5px;margin-top:1px}
+
+/* ─── SCROLL HINT ─── */
+.scroll-hint{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2;opacity:.4;
+}
+.scroll-mouse{width:22px;height:34px;border:1.5px solid rgba(255,255,255,.3);border-radius:11px;display:flex;align-items:flex-start;justify-content:center;padding-top:6px}
+.scroll-wheel{width:3px;height:6px;background:rgba(255,255,255,.6);border-radius:2px;animation:scrollWheel 2s ease-in-out infinite}
+@keyframes scrollWheel{0%{opacity:1;transform:translateY(0)}80%{opacity:0;transform:translateY(10px)}100%{opacity:0}}
+.scroll-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+
+/* ─── TRUST BAR ─── */
+.trust{
+  padding:20px 60px;
+  background:rgba(255,255,255,.02);
+  border-top:1px solid rgba(99,138,255,.08);border-bottom:1px solid rgba(99,138,255,.08);
+  display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:20px;
+}
+.trust-item{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:500;color:rgba(255,255,255,.35);letter-spacing:.5px}
+.trust-item svg{width:16px;height:16px;stroke:rgba(99,138,255,.6);flex-shrink:0}
+
+/* ─── SHARED SECTION ─── */
+.sec{padding:100px 60px;position:relative;overflow:hidden}
+.sec-label{display:inline-block;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;font-weight:700;color:var(--c1);margin-bottom:14px}
+.sec-title{font-size:clamp(28px,3.5vw,48px);font-weight:800;line-height:1.1;margin-bottom:14px;letter-spacing:-.5px}
+.sec-sub{font-size:15px;color:var(--txt);max-width:460px;line-height:1.75}
+.grad-blue{background:linear-gradient(90deg,var(--b2),var(--c1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-vio{background:linear-gradient(90deg,var(--v1),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ─── REVEAL ANIMATIONS ─── */
+.from-left{opacity:0;transform:translateX(-60px);transition:opacity .9s cubic-bezier(.23,1,.32,1),transform .9s cubic-bezier(.23,1,.32,1)}
+.from-right{opacity:0;transform:translateX(60px);transition:opacity .9s cubic-bezier(.23,1,.32,1),transform .9s cubic-bezier(.23,1,.32,1)}
+.from-bottom{opacity:0;transform:translateY(50px);transition:opacity .85s cubic-bezier(.23,1,.32,1),transform .85s cubic-bezier(.23,1,.32,1)}
+.from-left.vis,.from-right.vis,.from-bottom.vis{opacity:1;transform:translate(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
+
+/* ─── PROBLEMS ─── */
+.problems-sec{background:linear-gradient(180deg,var(--dk) 0%,var(--dk2) 100%)}
+.prob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);margin-top:60px}
+.prob-card{
+  background:var(--dk2);padding:36px 28px;
+  position:relative;overflow:hidden;transition:.4s;
+}
+.prob-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(99,138,255,.06),rgba(0,200,255,.03));opacity:0;transition:.4s}
+.prob-card:hover{transform:translateY(-4px);background:var(--dk3);z-index:2}
+.prob-card:hover::before{opacity:1}
+.prob-n{font-size:10px;font-weight:700;letter-spacing:3px;color:rgba(99,138,255,.3);text-transform:uppercase;margin-bottom:18px}
+.prob-ic{
+  width:50px;height:50px;border-radius:14px;margin-bottom:18px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(99,138,255,.08);border:1px solid rgba(99,138,255,.15);
+  transition:.35s;
+}
+.prob-ic svg{width:22px;height:22px;stroke:var(--b3);transition:.35s}
+.prob-card:hover .prob-ic{background:linear-gradient(135deg,var(--b1),var(--v1));border-color:transparent;box-shadow:0 0 24px rgba(99,138,255,.35);transform:scale(1.06) rotate(-4deg)}
+.prob-card:hover .prob-ic svg{stroke:#fff}
+.prob-card h3{font-size:16px;font-weight:700;color:#fff;margin-bottom:8px}
+.prob-card p{font-size:13px;color:rgba(255,255,255,.38);line-height:1.7}
+.prob-line{position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--b1),var(--c1));transform:scaleX(0);transform-origin:left;transition:.45s}
+.prob-card:hover .prob-line{transform:scaleX(1)}
+
+/* ─── FEATURE ROWS (left/right alternating) ─── */
+.features-sec{background:var(--dk2)}
+.feat-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+  padding:80px 0;border-bottom:1px solid rgba(255,255,255,.05);
+}
+.feat-row:last-child{border:none}
+.feat-row.rev .feat-text{order:2}.feat-row.rev .feat-visual{order:1}
+.feat-label{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--c1);margin-bottom:14px}
+.feat-title{font-size:clamp(24px,2.8vw,38px);font-weight:800;line-height:1.15;margin-bottom:16px;letter-spacing:-.3px}
+.feat-desc{font-size:14px;color:var(--txt);line-height:1.8;margin-bottom:28px}
+.feat-points{display:flex;flex-direction:column;gap:12px}
+.feat-point{display:flex;align-items:flex-start;gap:12px}
+.feat-point-ic{
+  width:32px;height:32px;border-radius:9px;flex-shrink:0;margin-top:1px;
+  background:rgba(0,200,255,.08);border:1px solid rgba(0,200,255,.15);
+  display:flex;align-items:center;justify-content:center;
+}
+.feat-point-ic svg{width:14px;height:14px;stroke:var(--c1)}
+.feat-point-text{font-size:13px;color:rgba(255,255,255,.65);line-height:1.6;padding-top:7px}
+/* Feature visual panels */
+.feat-visual{
+  background:rgba(255,255,255,.03);border:1px solid rgba(99,138,255,.15);
+  border-radius:20px;padding:28px;
+  position:relative;overflow:hidden;min-height:280px;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.feat-visual::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,255,.5),transparent)}
+.fv-glow{position:absolute;width:200px;height:200px;border-radius:50%;filter:blur(80px);pointer-events:none}
+.fv-header{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.fv-title{font-size:12px;font-weight:600;color:rgba(255,255,255,.5)}
+.fv-status{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:#4ADE80}
+.fv-status-dot{width:6px;height:6px;border-radius:50%;background:#4ADE80;animation:c3pulse 2s infinite}
+.fv-body{position:relative;z-index:1}
+.fv-bar-row{margin-bottom:14px}
+.fv-bar-label{display:flex;justify-content:space-between;margin-bottom:6px}
+.fv-bar-label span{font-size:11px;color:rgba(255,255,255,.4)}
+.fv-bar-label strong{font-size:11px;color:#fff}
+.fv-bar{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.fv-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--b1),var(--c1));transition:width 1.5s cubic-bezier(.23,1,.32,1)}
+.fv-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.fv-tag{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:8px;padding:7px 12px;
+  font-size:11px;font-weight:600;color:rgba(255,255,255,.6);
+}
+.fv-tag svg{width:12px;height:12px;stroke:var(--c1)}
+.fv-timeline{display:flex;flex-direction:column;gap:0}
+.fv-tl-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04);position:relative;z-index:1}
+.fv-tl-item:last-child{border:none}
+.fv-tl-dot{width:10px;height:10px;border-radius:50%;margin-top:3px;flex-shrink:0}
+.fv-tl-dot.done{background:#4ADE80;box-shadow:0 0 8px rgba(74,222,128,.4)}
+.fv-tl-dot.active{background:var(--c1);box-shadow:0 0 8px rgba(0,200,255,.5);animation:tlPulse 2s infinite}
+.fv-tl-dot.pending{background:rgba(255,255,255,.15)}
+@keyframes tlPulse{0%,100%{box-shadow:0 0 4px rgba(0,200,255,.4)}50%{box-shadow:0 0 14px rgba(0,200,255,.8)}}
+.fv-tl-text{font-size:12px;font-weight:600;color:rgba(255,255,255,.6);padding-top:2px}
+.fv-tl-text.active{color:var(--c1)}
+.fv-doc-list{display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
+.fv-doc{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 14px}
+.fv-doc-left{display:flex;align-items:center;gap:10px}
+.fv-doc-ic{width:28px;height:28px;border-radius:7px;background:rgba(99,138,255,.12);display:flex;align-items:center;justify-content:center}
+.fv-doc-ic svg{width:13px;height:13px;stroke:var(--b3)}
+.fv-doc-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.7)}
+.fv-doc-size{font-size:10px;color:rgba(255,255,255,.3);margin-top:1px}
+.fv-doc-ok{width:18px;height:18px;border-radius:50%;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.2);display:flex;align-items:center;justify-content:center}
+.fv-doc-ok svg{width:10px;height:10px;stroke:#4ADE80}
+
+/* ─── SERVICES GRID ─── */
+.srv-sec{background:var(--dk3)}
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:60px}
+.srv-card{
+  background:rgba(255,255,255,.03);border:1px solid rgba(99,138,255,.1);
+  border-radius:18px;padding:30px 24px;
+  position:relative;overflow:hidden;transition:.4s;cursor:none;
+}
+.srv-card::after{content:'';position:absolute;top:-60px;right:-60px;width:150px;height:150px;border-radius:50%;background:rgba(99,138,255,.05);filter:blur(40px);transition:.4s}
+.srv-card:hover{border-color:rgba(0,200,255,.25);transform:translateY(-8px);box-shadow:0 24px 60px rgba(0,0,0,.25)}
+.srv-card:hover::after{background:rgba(0,200,255,.1);transform:scale(1.3)}
+.srv-n{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(0,200,255,.4);margin-bottom:18px}
+.srv-ic{
+  width:54px;height:54px;border-radius:14px;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(99,138,255,.08);border:1px solid rgba(99,138,255,.15);
+  transition:.35s;
+}
+.srv-ic svg{width:24px;height:24px;stroke:var(--b3);transition:.35s}
+.srv-card:hover .srv-ic{background:linear-gradient(135deg,var(--b1),var(--c1));border-color:transparent;box-shadow:0 0 28px rgba(0,200,255,.3);transform:rotate(-5deg) scale(1.05)}
+.srv-card:hover .srv-ic svg{stroke:#fff}
+.srv-card h3{font-size:16px;font-weight:700;color:#fff;margin-bottom:8px}
+.srv-card p{font-size:12px;color:rgba(255,255,255,.38);line-height:1.7}
+.srv-tag{
+  display:inline-block;margin-top:16px;
+  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--c1);background:rgba(0,200,255,.07);border:1px solid rgba(0,200,255,.15);
+  padding:4px 12px;border-radius:20px;
+}
+
+/* ─── NUMBERS BAND ─── */
+.nums{
+  padding:80px 60px;
+  background:linear-gradient(135deg,var(--dk3),var(--dk2));
+  position:relative;overflow:hidden;
+}
+.nums::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 100% at 50% 50%,rgba(99,138,255,.06),transparent)}
+.nums-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;position:relative}
+.num-item{text-align:center}
+.num-val{font-size:clamp(44px,6vw,76px);font-weight:900;line-height:1;background:linear-gradient(135deg,var(--c1),var(--b2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.num-lbl{font-size:11px;font-weight:500;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:2px}
+.nums-divider{width:1px;background:rgba(255,255,255,.06);position:absolute;top:10px;bottom:10px}
+
+/* ─── TESTIMONIALS ─── */
+.testi-sec{background:var(--dk2)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:60px}
+.testi-card{
+  background:rgba(255,255,255,.03);border:1px solid rgba(99,138,255,.1);
+  border-radius:18px;padding:28px;transition:.35s;position:relative;overflow:hidden;
+}
+.testi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,255,.4),transparent);opacity:0;transition:.35s}
+.testi-card:hover{transform:translateY(-6px);border-color:rgba(0,200,255,.2);box-shadow:0 20px 50px rgba(0,0,0,.25)}.testi-card:hover::before{opacity:1}
+.testi-q{font-size:40px;font-weight:900;color:rgba(99,138,255,.3);line-height:.7;margin-bottom:10px}
+.testi-txt{font-size:13px;color:rgba(255,255,255,.58);line-height:1.75;margin-bottom:18px;font-style:italic}
+.testi-stars{display:flex;gap:3px;margin-bottom:16px}
+.testi-stars svg{width:13px;height:13px;fill:#FBBF24;stroke:none}
+.testi-author{display:flex;align-items:center;gap:11px}
+.testi-av{
+  width:42px;height:42px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--b1),var(--v1));
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;
+  box-shadow:0 0 14px rgba(99,138,255,.3);
+}
+.testi-name{font-size:13px;font-weight:700;color:#fff}
+.testi-role{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px}
+
+/* ─── FAQ ─── */
+.faq-sec{background:var(--dk)}
+.faq-inner{display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:start;margin-top:60px}
+.faq-list{display:flex;flex-direction:column;gap:12px}
+.faq-item{
+  background:rgba(255,255,255,.03);border:1px solid rgba(99,138,255,.1);
+  border-radius:14px;overflow:hidden;transition:.3s;
+}
+.faq-item.open{border-color:rgba(0,200,255,.25);background:rgba(99,138,255,.05)}
+.faq-q{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 22px;cursor:none;
+  font-size:14px;font-weight:600;color:rgba(255,255,255,.75);
+  transition:.25s;
+}
+.faq-item.open .faq-q{color:#fff}
+.faq-arrow{width:20px;height:20px;display:flex;align-items:center;justify-content:center;transition:.3s;flex-shrink:0}
+.faq-arrow svg{width:14px;height:14px;stroke:rgba(255,255,255,.3);transition:.3s}
+.faq-item.open .faq-arrow{transform:rotate(45deg)}.faq-item.open .faq-arrow svg{stroke:var(--c1)}
+.faq-a{max-height:0;overflow:hidden;transition:.4s cubic-bezier(.23,1,.32,1);font-size:13px;color:rgba(255,255,255,.45);line-height:1.75;padding:0 22px}
+.faq-item.open .faq-a{max-height:200px;padding:0 22px 18px}
+.faq-right{
+  background:rgba(255,255,255,.03);border:1px solid rgba(99,138,255,.12);
+  border-radius:20px;padding:32px;position:sticky;top:90px;
+}
+.faq-right::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,255,.5),transparent)}
+.faq-cta-ic{
+  width:56px;height:56px;border-radius:16px;
+  background:linear-gradient(135deg,var(--b1),var(--v1));
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;box-shadow:0 0 28px rgba(99,138,255,.35);
+}
+.faq-cta-ic svg{width:26px;height:26px;stroke:#fff}
+.faq-right h3{font-size:22px;font-weight:800;color:#fff;margin-bottom:10px}
+.faq-right p{font-size:13px;color:rgba(255,255,255,.45);line-height:1.75;margin-bottom:24px}
+.faq-contact{display:flex;flex-direction:column;gap:10px}
+.faq-contact-item{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.55)}
+.faq-contact-item svg{width:16px;height:16px;stroke:var(--c1);flex-shrink:0}
+
+/* ─── PRICING ─── */
+.pricing-sec{background:var(--dk3)}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:60px;align-items:start}
+.price-card{
+  background:rgba(255,255,255,.03);border:1px solid rgba(99,138,255,.12);
+  border-radius:22px;padding:36px 28px;transition:.4s;position:relative;overflow:hidden;
+}
+.price-card:hover{transform:translateY(-8px);box-shadow:0 32px 80px rgba(0,0,0,.25)}
+.price-card.feat{
+  background:linear-gradient(145deg,rgba(26,46,255,.18),rgba(124,31,255,.12));
+  border:1px solid rgba(99,138,255,.35);transform:scale(1.03);
+}
+.price-card.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--b1),var(--c1),var(--v1))}
+.price-card.feat:hover{transform:scale(1.03) translateY(-8px);box-shadow:0 32px 80px rgba(26,46,255,.15)}
+.pc-top-badge{position:absolute;top:18px;right:18px;background:linear-gradient(135deg,var(--b1),var(--v1));color:#fff;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:20px}
+.pc-plan{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--c1);margin-bottom:10px}
+.pc-name{font-size:20px;font-weight:800;color:#fff;margin-bottom:22px}
+.pc-price{display:flex;align-items:flex-start;gap:2px;margin-bottom:6px}
+.pc-currency{font-size:18px;font-weight:700;color:rgba(255,255,255,.4);margin-top:10px}
+.pc-num{font-size:56px;font-weight:900;line-height:1;color:#fff}
+.price-card.feat .pc-num{background:linear-gradient(135deg,var(--c1),var(--b2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pc-period{font-size:12px;color:rgba(255,255,255,.3);margin-bottom:26px}
+.pc-divider{height:1px;background:rgba(255,255,255,.06);margin-bottom:22px}
+.pc-features{list-style:none;margin-bottom:28px;display:flex;flex-direction:column;gap:0}
+.pc-features li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:rgba(255,255,255,.55);padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.pc-features li:last-child{border:none}
+.price-card.feat .pc-features li{color:rgba(255,255,255,.75)}
+.pc-check{flex-shrink:0;width:18px;height:18px;margin-top:1px;display:flex;align-items:center;justify-content:center}
+.pc-check svg{width:14px;height:14px;stroke:var(--c1)}
+.pc-btn-outline{width:100%;padding:14px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:.8px;font-family:'Poppins',sans-serif;cursor:none;border:1.5px solid rgba(99,138,255,.3);background:transparent;color:rgba(255,255,255,.6);transition:.3s;text-transform:uppercase}
+.pc-btn-outline:hover{border-color:var(--c1);color:var(--c1);box-shadow:0 0 20px rgba(0,200,255,.15)}
+.pc-btn-fill{width:100%;padding:14px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:.8px;font-family:'Poppins',sans-serif;cursor:none;border:none;background:linear-gradient(135deg,var(--b1),var(--v1));color:#fff;box-shadow:0 0 32px rgba(99,138,255,.4);transition:.3s;position:relative;overflow:hidden;text-transform:uppercase}
+.pc-btn-fill::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--v1),var(--pk));opacity:0;transition:.3s}
+.pc-btn-fill span{position:relative;z-index:1}
+.pc-btn-fill:hover::before{opacity:1}.pc-btn-fill:hover{box-shadow:0 0 48px rgba(99,138,255,.55);transform:translateY(-2px)}
+
+/* ─── CTA FINAL ─── */
+.cta-final{
+  padding:120px 60px;text-align:center;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(26,46,255,.12),transparent 60%),var(--dk);
+}
+.cta-ring{position:absolute;border-radius:50%;border:1px solid rgba(99,138,255,.08);top:50%;left:50%;transform:translate(-50%,-50%);animation:ringPulse 4s ease-in-out infinite;pointer-events:none}
+.cta-ring.r1{width:300px;height:300px}
+.cta-ring.r2{width:500px;height:500px;animation-delay:.8s}
+.cta-ring.r3{width:700px;height:700px;animation-delay:1.6s}
+.cta-ring.r4{width:900px;height:900px;animation-delay:2.4s}
+@keyframes ringPulse{0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(1)}50%{opacity:.1;transform:translate(-50%,-50%) scale(1.04)}}
+.cta-final h2{font-size:clamp(32px,5vw,62px);font-weight:900;color:#fff;margin-bottom:16px;position:relative;line-height:1.1;letter-spacing:-.5px}
+.cta-final p{font-size:16px;color:rgba(255,255,255,.4);max-width:420px;margin:0 auto 44px;position:relative;line-height:1.75}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* ─── FOOTER ─── */
+footer{background:#030409;padding:72px 60px 36px;border-top:1px solid rgba(99,138,255,.08)}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.ft-brand p{font-size:13px;color:rgba(255,255,255,.28);line-height:1.75;margin-top:14px;max-width:210px}
+.ft-col h4{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--c1);margin-bottom:16px;font-weight:700}
+.ft-col a{display:block;font-size:12px;color:rgba(255,255,255,.32);text-decoration:none;margin-bottom:9px;transition:.2s;font-weight:400}
+.ft-col a:hover{color:rgba(255,255,255,.75)}
+.ft-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.04);gap:20px;flex-wrap:wrap}
+.ft-copy{font-size:11px;color:rgba(255,255,255,.18)}
+.ft-disc{font-size:11px;color:rgba(255,255,255,.15);max-width:380px;text-align:right;line-height:1.6}
+
+/* ─── MOBILE ─── */
+@media(max-width:1100px){
+  .hero{grid-template-columns:1fr;padding:100px 40px 80px;text-align:left}
+  .hero-right{display:none}
+  .feat-row,.feat-row.rev{grid-template-columns:1fr;gap:40px}
+  .feat-row.rev .feat-text{order:1}.feat-row.rev .feat-visual{order:2}
+  .prob-grid{grid-template-columns:repeat(2,1fr)}
+  .srv-grid{grid-template-columns:repeat(2,1fr)}
+  .testi-grid{grid-template-columns:repeat(2,1fr)}
+  .price-grid{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto}
+  .price-card.feat{transform:scale(1)}
+  .price-card.feat:hover{transform:translateY(-8px)}
+  .nums-inner{grid-template-columns:repeat(2,1fr)}
+  .faq-inner{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr 1fr}
+  .features-sec .sec{padding:80px 40px}
+}
+@media(max-width:768px){
+  #nav{padding:0 20px}
+  .nav-links{display:none}
+  .nav-btn{display:none}
+  #ham{display:flex}
+  .hero{padding:90px 24px 80px}
+  .hero h1{font-size:36px}
+  .hero-btns{flex-direction:column;align-items:flex-start}
+  .hero-kpis{gap:0}
+  .kpi{padding:0 16px}.kpi:first-child{padding-left:0}
+  .trust{padding:16px 24px;gap:14px}
+  .trust-item{font-size:10px}
+  .sec{padding:70px 24px}
+  .prob-grid{grid-template-columns:1fr}
+  .srv-grid{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .nums{padding:60px 24px}
+  .nums-inner{grid-template-columns:1fr 1fr;gap:32px}
+  .faq-inner{grid-template-columns:1fr;gap:40px}
+  .faq-right{position:relative;top:0}
+  .ft-grid{grid-template-columns:1fr;gap:32px}
+  .ft-disc{text-align:left}
+  .ft-bottom{flex-direction:column;align-items:flex-start}
+  .cta-final{padding:80px 24px}
+  .cta-btns{flex-direction:column;align-items:center}
+  .features-sec .sec{padding:60px 24px}
+  .feat-row{padding:50px 0;gap:32px}
+  .footer{padding:60px 24px 32px}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur2"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo hoverable" href="#">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M9 2L15 5.5V12.5L9 16L3 12.5V5.5L9 2Z"/><path d="M9 7V11M7 9H11" stroke-width="1.5"/></svg>
+    </div>
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">Strategix Assistance</div>
+      <div class="nav-logo-sub">Cabinet Administratif · France</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#services" class="hoverable">Services</a>
+    <a href="#blocage" class="hoverable">Blocage</a>
+    <a href="#tarifs" class="hoverable">Tarifs</a>
+    <a href="#temoignages" class="hoverable">Témoignages</a>
+  </div>
+  <button class="nav-btn hoverable"><span>Analyse Gratuite →</span></button>
+  <div id="ham" class="hoverable" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div id="mob-menu">
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#blocage" onclick="toggleMenu()">Blocage</a>
+  <a href="#tarifs" onclick="toggleMenu()">Tarifs</a>
+  <a href="#temoignages" onclick="toggleMenu()">Témoignages</a>
+  <button class="nav-btn" style="font-size:14px;padding:14px 36px">Analyse Gratuite →</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-grid-lines"></div>
+
+  <div class="hero-left">
+    <div class="hero-chip from-left">
+      <span class="chip-dot"></span>
+      Cabinet administratif certifié
+    </div>
+    <h1>
+      <span class="t1 from-left d1">Votre dossier</span>
+      <span class="t2 from-left d2">préfecture est</span>
+      <span class="t3 from-left d3">bloqué ?</span>
+    </h1>
+    <p class="hero-sub from-left d2">Plus de récépissé, <strong>silence administratif</strong>, situation figée depuis des mois. Nous activons les leviers juridiques pour obtenir une réponse rapide.</p>
+    <div class="hero-btns from-left d3">
+      <button class="btn-grad hoverable">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>Analyse Gratuite</span>
+      </button>
+      <button class="btn-ghost-hero hoverable">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <span>Comment ça marche</span>
+      </button>
+    </div>
+    <div class="hero-kpis from-left d4">
+      <div class="kpi"><div class="kpi-n">95%</div><div class="kpi-l">Succès</div></div>
+      <div class="kpi"><div class="kpi-n">1500+</div><div class="kpi-l">Dossiers</div></div>
+      <div class="kpi"><div class="kpi-n">&lt;30j</div><div class="kpi-l">Réponse</div></div>
+    </div>
+  </div>
+
+  <div class="hero-right from-right d1">
+    <div class="scene">
+      <div id="card3d">
+        <!-- Mini floating cards -->
+        <div class="mini-card mc1">
+          <div class="mc-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div><div class="mc-val">95%</div><div class="mc-lbl">Taux succès</div></div>
+        </div>
+        <div class="mini-card mc2">
+          <div class="mc-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><div class="mc-val">&lt;30j</div><div class="mc-lbl">Réponse moy.</div></div>
+        </div>
+
+        <div class="card3d-inner">
+          <div class="c3-header">
+            <div>
+              <div class="c3-id">Dossier <span>#2024-8847</span></div>
+              <div class="c3-prefecture">Préfecture de Nanterre</div>
+            </div>
+            <div class="c3-badge"><span class="c3-badge-dot"></span>VALIDÉ</div>
+          </div>
+          <div class="c3-progress-row">
+            <span class="c3-progress-label">Instruction en cours</span>
+            <span class="c3-progress-pct">85%</span>
+          </div>
+          <div class="c3-track"><div class="c3-fill"></div></div>
+          <div class="c3-steps">
+            <div class="c3-step">
+              <div class="c3-icon done"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="c3-step-text done">Dossier ANEF soumis & corrigé</div>
+            </div>
+            <div class="c3-step">
+              <div class="c3-icon done"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="c3-step-text done">Relances officielles envoyées</div>
+            </div>
+            <div class="c3-step">
+              <div class="c3-icon active"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div class="c3-step-text active">Saisine Défenseur des Droits</div>
+            </div>
+            <div class="c3-step">
+              <div class="c3-icon pending"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+              <div class="c3-step-text pending">Recours Tribunal Administratif</div>
+            </div>
+          </div>
+          <button class="c3-cta hoverable"><span>DÉBLOQUER MON DOSSIER →</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+    <div class="scroll-label">Scroll</div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust">
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement sécurisé Stripe</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Conforme RGPD</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Droit administratif français</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.5a19.79 19.79 0 0 1-3-8.59A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Support 24h/7j</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Sans frais cachés</div>
+</div>
+
+<!-- PROBLEMS -->
+<section class="sec problems-sec" id="blocage">
+  <div style="text-align:center;margin-bottom:8px"><span class="sec-label from-bottom">Le Blocage Administratif</span></div>
+  <h2 class="sec-title from-bottom" style="text-align:center">Reconnaissez-vous <span class="grad-blue">votre situation ?</span></h2>
+  <p class="sec-sub from-bottom d1" style="text-align:center;margin:0 auto">Des milliers de personnes en France attendent des mois sans réponse. Ne laissez pas le silence détruire votre vie.</p>
+  <div class="prob-grid">
+    <div class="prob-card from-bottom">
+      <div class="prob-n">01</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <h3>Attente Interminable</h3>
+      <p>Dossier ANEF en instruction depuis plus de 6 mois sans aucune réponse de la préfecture.</p>
+      <div class="prob-line"></div>
+    </div>
+    <div class="prob-card from-bottom d1">
+      <div class="prob-n">02</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01"/></svg></div>
+      <h3>Rendez-vous Impossible</h3>
+      <p>Impossible d'obtenir un créneau sur le site de la préfecture malgré des mois de tentatives.</p>
+      <div class="prob-line"></div>
+    </div>
+    <div class="prob-card from-bottom d2">
+      <div class="prob-n">03</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+      <h3>Plus de Récépissé</h3>
+      <p>Votre titre de séjour a expiré. Vous n'avez reçu ni prolongation ni nouveau récépissé.</p>
+      <div class="prob-line"></div>
+    </div>
+    <div class="prob-card from-bottom">
+      <div class="prob-n">04</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
+      <h3>Risque Perte d'Emploi</h3>
+      <p>Votre employeur menace de suspendre votre contrat car vous n'avez plus de document valide.</p>
+      <div class="prob-line"></div>
+    </div>
+    <div class="prob-card from-bottom d1">
+      <div class="prob-n">05</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg></div>
+      <h3>Silence Administratif</h3>
+      <p>Vos relances à la préfecture restent sans réponse. Vous êtes dans le flou total depuis des semaines.</p>
+      <div class="prob-line"></div>
+    </div>
+    <div class="prob-card from-bottom d2">
+      <div class="prob-n">06</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
+      <h3>Situation Bloquée</h3>
+      <p>Pas de voyages, plus de CAF, plus de droits. Votre vie professionnelle et sociale est en suspens.</p>
+      <div class="prob-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES – alternating left/right -->
+<div class="features-sec" id="services">
+  <div class="sec" style="padding-bottom:0">
+    <div style="text-align:center;margin-bottom:8px"><span class="sec-label from-bottom">Nos Leviers d'Action</span></div>
+    <h2 class="sec-title from-bottom" style="text-align:center">Comment nous <span class="grad-vio">débloquons</span> votre dossier</h2>
+  </div>
+  <div class="sec" style="padding-top:20px;padding-bottom:60px">
+
+    <!-- ROW 1 -->
+    <div class="feat-row">
+      <div class="feat-text from-left">
+        <div class="feat-label">Étape 01</div>
+        <h3 class="feat-title">Audit complet de votre <span class="grad-blue">dossier ANEF</span></h3>
+        <p class="feat-desc">Notre équipe analyse chaque pièce de votre dossier pour identifier exactement ce qui bloque l'instruction. Un diagnostic précis est la base d'une stratégie efficace.</p>
+        <div class="feat-points">
+          <div class="feat-point">
+            <div class="feat-point-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="feat-point-text">Vérification de la complétude de chaque document requis</div>
+          </div>
+          <div class="feat-point">
+            <div class="feat-point-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="feat-point-text">Identification des erreurs bloquantes sur la plateforme ANEF</div>
+          </div>
+          <div class="feat-point">
+            <div class="feat-point-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="feat-point-text">Rapport détaillé avec stratégie personnalisée sous 48h</div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-visual from-right" style="background:rgba(255,255,255,.03);border:1px solid rgba(99,138,255,.15);border-radius:20px;padding:28px;position:relative;overflow:hidden">
+        <div class="fv-glow" style="background:rgba(26,46,255,.15);top:-40px;right:-40px"></div>
+        <div class="fv-header" style="margin-bottom:22px">
+          <span class="fv-title">Audit Dossier ANEF</span>
+          <div class="fv-status"><span class="fv-status-dot"></span>Analyse en cours</div>
+        </div>
+        <div class="fv-bar-row">
+          <div class="fv-bar-label"><span>Documents fournis</span><strong>8/10</strong></div>
+          <div class="fv-bar"><div class="fv-bar-fill" style="width:80%"></div></div>
+        </div>
+        <div class="fv-bar-row">
+          <div class="fv-bar-label"><span>Conformité ANEF</span><strong>92%</strong></div>
+          <div class="fv-bar"><div class="fv-bar-fill" style="width:92%"></div></div>
+        </div>
+        <div class="fv-bar-row">
+          <div class="fv-bar-label"><span>Probabilité déblocage</span><strong>95%</strong></div>
+          <div class="fv-bar"><div class="fv-bar-fill" style="width:95%;background:linear-gradient(90deg,var(--v1),var(--pk))"></div></div>
+        </div>
+        <div class="fv-tags">
+          <div class="fv-tag"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Passeport valide</div>
+          <div class="fv-tag"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Justificatif domicile</div>
+          <div class="fv-tag" style="border-color:rgba(251,191,36,.2);color:rgba(251,191,36,.7)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" style="stroke:#FBBF24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Contrat travail manquant</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2 -->
+    <div class="feat-row rev">
+      <div class="feat-text from-right">
+        <div class="feat-label">Étape 02</div>
+        <h3 class="feat-title">Relances officielles & <span class="grad-vio">Défenseur des Droits</span></h3>
+        <p class="feat-desc">Nous rédigeons des courriers recommandés officiels et saisissons le Défenseur des Droits pour briser le silence administratif. Ces leviers forcent l'administration à réagir.</p>
+        <div class="feat-points">
+          <div class="feat-point">
+            <div class="feat-point-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="feat-point-text">Courriers recommandés ciblés avec accusé de réception</div>
+          </div>
+          <div class="feat-point">
+            <div class="feat-point-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="feat-point-text">Saisine formelle du Défenseur des Droits en 48h</div>
+          </div>
+          <div class="feat-point">
+            <div class="feat-point-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="feat-point-text">Suivi et relances jusqu'à obtention d'une réponse écrite</div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-visual from-left" style="background:rgba(255,255,255,.03);border:1px solid rgba(99,138,255,.15);border-radius:20px;padding:28px;position:relative;overflow:hidden">
+        <div class="fv-glow" style="background:rgba(124,31,255,.12);bottom:-40px;left:-40px"></div>
+        <div class="fv-header" style="margin-bottom:20px">
+          <span class="fv-title">Chronologie des actions</span>
+          <div class="fv-status"><span class="fv-status-dot"></span>En cours</div>
+        </div>
+        <div class="fv-timeline">
+          <div class="fv-tl-item"><div class="fv-tl-dot done"></div><div class="fv-tl-text done">Analyse initiale du dossier — J+0</div></div>
+          <div class="fv-tl-item"><div class="fv-tl-dot done"></div><div class="fv-tl-text done">Courrier recommandé préfecture — J+3</div></div>
+          <div class="fv-tl-item"><div class="fv-tl-dot done"></div><div class="fv-tl-text done">Mise en demeure officielle — J+10</div></div>
+          <div class="fv-tl-item"><div class="fv-tl-dot active"></div><div class="fv-tl-text active">Saisine Défenseur des Droits — J+14</div></div>
+          <div class="fv-tl-item"><div class="fv-tl-dot pending"></div><div class="fv-tl-text">Recours Tribunal Administratif — J+21</div></div>
+          <div class="fv-tl-item"><div class="fv-tl-dot pending"></div><div class="fv-tl-text">Réponse préfecture attendue — J+28</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 3 -->
+    <div class="feat-row">
+      <div class="feat-text from-left">
+        <div class="feat-label">Étape 03</div>
+        <h3 class="feat-title">Recours au <span class="grad-blue">Tribunal Administratif</span></h3>
+        <p class="feat-desc">En dernier recours, nous préparons et accompagnons vos recours contentieux devant le Tribunal Administratif. Référé-liberté ou recours pour excès de pouvoir selon votre situation.</p>
+        <div class="feat-points">
+          <div class="feat-point">
+            <div class="feat-point-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="feat-point-text">Rédaction du mémoire introductif d'instance</div>
+          </div>
+          <div class="feat-point">
+            <div class="feat-point-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="feat-point-text">Procédure référé-liberté pour urgence absolue</div>
+          </div>
+          <div class="feat-point">
+            <div class="feat-point-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="feat-point-text">Orientation vers un avocat partenaire si nécessaire</div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-visual from-right" style="background:rgba(255,255,255,.03);border:1px solid rgba(99,138,255,.15);border-radius:20px;padding:28px;position:relative;overflow:hidden">
+        <div class="fv-glow" style="background:rgba(0,200,255,.1);top:-30px;right:-30px"></div>
+        <div class="fv-header" style="margin-bottom:20px">
+          <span class="fv-title">Documents juridiques</span>
+          <div class="fv-status"><span class="fv-status-dot"></span>Prêts</div>
+        </div>
+        <div class="fv-doc-list">
+          <div class="fv-doc">
+            <div class="fv-doc-left">
+              <div class="fv-doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <div><div class="fv-doc-name">Mémoire TA.pdf</div><div class="fv-doc-size">2.4 MB · Prêt</div></div>
+            </div>
+            <div class="fv-doc-ok"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+          <div class="fv-doc">
+            <div class="fv-doc-left">
+              <div class="fv-doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <div><div class="fv-doc-name">Référé-liberté.pdf</div><div class="fv-doc-size">1.8 MB · Prêt</div></div>
+            </div>
+            <div class="fv-doc-ok"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+          <div class="fv-doc">
+            <div class="fv-doc-left">
+              <div class="fv-doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <div><div class="fv-doc-name">Pièces justificatives.zip</div><div class="fv-doc-size">12.1 MB · Prêt</div></div>
+            </div>
+            <div class="fv-doc-ok"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES GRID -->
+<section class="sec srv-sec">
+  <div style="text-align:center;margin-bottom:8px"><span class="sec-label from-bottom">Tous nos Services</span></div>
+  <h2 class="sec-title from-bottom" style="text-align:center">Une solution pour <span class="grad-blue">chaque situation</span></h2>
+  <div class="srv-grid">
+    <div class="srv-card from-bottom hoverable">
+      <div class="srv-n">Service 01</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+      <h3>Dossiers ANEF</h3>
+      <p>Dépôt complet et correction des dossiers sur la plateforme ANEF pour garantir une instruction fluide et sans blocage.</p>
+      <span class="srv-tag">Accompagnement Expert</span>
+    </div>
+    <div class="srv-card from-bottom d1 hoverable">
+      <div class="srv-n">Service 02</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <h3>Rendez-vous Préfecture</h3>
+      <p>Accompagnement pour obtenir des créneaux en préfecture, même pour les dossiers les plus complexes et urgents.</p>
+      <span class="srv-tag">Suivi Personnalisé</span>
+    </div>
+    <div class="srv-card from-bottom d2 hoverable">
+      <div class="srv-n">Service 03</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+      <h3>Relances Officielles</h3>
+      <p>Emails et courriers recommandés ciblés pour forcer l'administration à traiter votre dossier sans délai supplémentaire.</p>
+      <span class="srv-tag">Impact Garanti</span>
+    </div>
+    <div class="srv-card from-bottom hoverable">
+      <div class="srv-n">Service 04</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <h3>Défenseur des Droits</h3>
+      <p>Saisine officielle de l'autorité indépendante pour dénoncer le blocage administratif et obtenir une intervention rapide.</p>
+      <span class="srv-tag">Intervention Officielle</span>
+    </div>
+    <div class="srv-card from-bottom d1 hoverable">
+      <div class="srv-n">Service 05</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M3 6l9-4 9 4v6c0 5-4 9-9 11-5-2-9-6-9-11V6z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+      <h3>Tribunal Administratif</h3>
+      <p>Recours pour excès de pouvoir ou référé-mesures utiles pour débloquer votre situation par une décision de justice.</p>
+      <span class="srv-tag">Procédure Juridique</span>
+    </div>
+    <div class="srv-card from-bottom d2 hoverable">
+      <div class="srv-n">Service 06</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+      <h3>Démarches Simplifiées</h3>
+      <p>Gestion et suivi rigoureux de vos demandes sur la plateforme officielle Démarches Simplifiées de l'État français.</p>
+      <span class="srv-tag">Suivi Rigoureux</span>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<div class="nums">
+  <div class="nums-inner">
+    <div class="num-item from-bottom"><div class="num-val" id="n1">0</div><div class="num-lbl">Taux de Succès</div></div>
+    <div class="num-item from-bottom d1"><div class="num-val" id="n2">0</div><div class="num-lbl">Dossiers Débloqués</div></div>
+    <div class="num-item from-bottom d2"><div class="num-val" id="n3">0</div><div class="num-lbl">Jours — Réponse Moy.</div></div>
+    <div class="num-item from-bottom d3"><div class="num-val">24/7</div><div class="num-lbl">Support Client</div></div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="sec testi-sec" id="temoignages">
+  <div style="text-align:center;margin-bottom:8px"><span class="sec-label from-bottom">Témoignages</span></div>
+  <h2 class="sec-title from-bottom" style="text-align:center">Ils nous ont fait <span class="grad-blue">confiance</span></h2>
+  <div class="testi-grid">
+    <div class="testi-card from-bottom hoverable">
+      <div class="testi-q">"</div>
+      <p class="testi-txt">Mon dossier ANEF était bloqué depuis 8 mois sans aucune nouvelle. Strategix m'a aidé à relancer officiellement la préfecture et j'ai enfin obtenu mon récépissé en moins de 3 semaines.</p>
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="testi-author"><div class="testi-av">AK</div><div><div class="testi-name">Ahmed K.</div><div class="testi-role">Dossier ANEF · Préfecture de Nanterre</div></div></div>
+    </div>
+    <div class="testi-card from-bottom d1 hoverable">
+      <div class="testi-q">"</div>
+      <p class="testi-txt">Grâce à l'accompagnement de Strategix, j'ai pu obtenir une réponse claire de l'administration après 7 mois de silence. Très sérieux, à l'écoute, et surtout efficace.</p>
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="testi-author"><div class="testi-av">MS</div><div><div class="testi-name">Maria S.</div><div class="testi-role">Accompagnement · Préfecture de Bobigny</div></div></div>
+    </div>
+    <div class="testi-card from-bottom d2 hoverable">
+      <div class="testi-q">"</div>
+      <p class="testi-txt">Très professionnel et rapide. L'analyse de mon dossier m'a permis de comprendre exactement pourquoi j'étais bloqué et comment agir. Résultat en 18 jours.</p>
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="testi-author"><div class="testi-av">JM</div><div><div class="testi-name">Julien M.</div><div class="testi-role">Analyse · Préfecture de Paris</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec faq-sec">
+  <div><span class="sec-label from-bottom">FAQ</span></div>
+  <h2 class="sec-title from-bottom">Questions <span class="grad-vio">fréquentes</span></h2>
+  <div class="faq-inner">
+    <div class="faq-list from-left">
+      <div class="faq-item">
+        <div class="faq-q hoverable" onclick="toggleFaq(this)">
+          <span>Êtes-vous un cabinet d'avocats ?</span>
+          <div class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="faq-a">Non. Strategix Assistance est un cabinet d'assistance administrative, pas un cabinet d'avocats. Nous n'exerçons pas la profession d'avocat et ne fournissons pas de conseil juridique au sens légal. Nous vous accompagnons dans vos démarches administratives.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q hoverable" onclick="toggleFaq(this)">
+          <span>Garantissez-vous un résultat positif ?</span>
+          <div class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="faq-a">Nous ne pouvons pas garantir légalement un résultat, mais notre taux de succès de 95% parle pour nous. Nous nous engageons à mettre en œuvre tous les leviers disponibles pour débloquer votre situation dans les meilleurs délais.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q hoverable" onclick="toggleFaq(this)">
+          <span>Combien de temps prend l'analyse ?</span>
+          <div class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="faq-a">L'analyse complète de votre dossier est réalisée sous 24 à 48 heures ouvrées après réception de vos documents. Vous recevez ensuite un rapport détaillé avec la stratégie recommandée et les étapes à suivre.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q hoverable" onclick="toggleFaq(this)">
+          <span>Que comprend l'analyse à 79€ exactement ?</span>
+          <div class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="faq-a">L'analyse à 79€ comprend : audit complet de votre dossier ANEF, vérification de chaque document, identification précise du ou des blocages, et remise d'un rapport avec une stratégie de déblocage personnalisée sous 48h.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q hoverable" onclick="toggleFaq(this)">
+          <span>Puis-je me faire rembourser ?</span>
+          <div class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="faq-a">Conformément à nos CGV, une prestation d'analyse ayant été réalisée ne peut pas être remboursée. Toutefois, si nous n'identifions aucun levier d'action pour votre dossier, nous vous en informons avant toute facturation.</div>
+      </div>
+    </div>
+    <div class="faq-right from-right" style="position:relative">
+      <div class="faq-cta-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.5a19.79 19.79 0 0 1-3-8.59A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <h3>Une question spécifique ?</h3>
+      <p>Notre équipe répond à toutes vos questions dans les 2 heures ouvrées. Expliquez-nous votre situation et nous vous guidons.</p>
+      <div class="faq-contact">
+        <div class="faq-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>contact@strategix-assistance.fr</div>
+        <div class="faq-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.5a19.79 19.79 0 0 1-3-8.59A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+33 1 23 45 67 89</div>
+        <div class="faq-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>WhatsApp disponible</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="sec pricing-sec" id="tarifs">
+  <div style="text-align:center;margin-bottom:8px"><span class="sec-label from-bottom">Tarification</span></div>
+  <h2 class="sec-title from-bottom" style="text-align:center">Investissez dans votre <span class="grad-vio">avenir en France</span></h2>
+  <p class="sec-sub from-bottom d1" style="text-align:center;margin:0 auto 0">Sans frais cachés. Tarifs fixes calculés pour maximiser vos chances de déblocage.</p>
+  <div class="price-grid">
+    <div class="price-card from-bottom hoverable">
+      <div class="pc-plan">Essentiel</div>
+      <div class="pc-name">Analyse Complète</div>
+      <div class="pc-price"><span class="pc-currency">€</span><span class="pc-num">79</span></div>
+      <div class="pc-period">Par dossier · Réponse sous 24–48h</div>
+      <div class="pc-divider"></div>
+      <ul class="pc-features">
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Audit complet dossier ANEF</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Vérification de tous les documents</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Identification précise du blocage</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Stratégie personnalisée</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Rapport détaillé sous 48h</li>
+      </ul>
+      <button class="pc-btn-outline hoverable">Commencer →</button>
+    </div>
+    <div class="price-card feat from-bottom d1 hoverable">
+      <div class="pc-top-badge">Recommandé</div>
+      <div class="pc-plan">Complet</div>
+      <div class="pc-name">Pack Assistance</div>
+      <div class="pc-price"><span class="pc-currency">€</span><span class="pc-num">299</span></div>
+      <div class="pc-period">Accompagnement complet jusqu'à réponse</div>
+      <div class="pc-divider"></div>
+      <ul class="pc-features">
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Correction dossier ANEF complète</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Rédaction courriers de relance</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Assistance Démarches Simplifiées</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Saisine Défenseur des Droits</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Suivi complet jusqu'à réponse</li>
+      </ul>
+      <button class="pc-btn-fill hoverable"><span>Débloquer mon dossier →</span></button>
+    </div>
+    <div class="price-card from-bottom d2 hoverable">
+      <div class="pc-plan">Juridique</div>
+      <div class="pc-name">Pack Juridique</div>
+      <div class="pc-price"><span class="pc-currency">€</span><span class="pc-num">599</span></div>
+      <div class="pc-period">Procédures contentieuses · Tribunal</div>
+      <div class="pc-divider"></div>
+      <ul class="pc-features">
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Rédaction du mémoire TA</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Procédure référé-liberté</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Suivi tribunal administratif</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Orientation avocat partenaire</li>
+        <li><span class="pc-check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Gestion urgence administrative</li>
+      </ul>
+      <button class="pc-btn-outline hoverable">Commencer →</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="cta-ring r1"></div>
+  <div class="cta-ring r2"></div>
+  <div class="cta-ring r3"></div>
+  <div class="cta-ring r4"></div>
+  <h2 class="from-bottom">Ne laissez pas l'administration<br><span class="grad-blue">décider de votre avenir</span></h2>
+  <p class="from-bottom d1">Chaque jour qui passe est un jour perdu. Notre équipe est prête à agir maintenant pour vous.</p>
+  <div class="cta-btns from-bottom d2">
+    <button class="btn-grad hoverable" style="font-size:15px;padding:17px 40px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>Analyse gratuite — 0€</span>
+    </button>
+    <button class="btn-ghost-hero hoverable" style="font-size:14px;padding:17px 36px">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+      <span>contact@strategix-assistance.fr</span>
+    </button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+        <div class="nav-logo-mark" style="width:34px;height:34px">
+          <svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M9 2L15 5.5V12.5L9 16L3 12.5V5.5L9 2Z"/><path d="M9 7V11M7 9H11" stroke-width="1.5"/></svg>
+        </div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff">Strategix Assistance</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.25);letter-spacing:2px;text-transform:uppercase">Cabinet Administratif · France</div>
+        </div>
+      </div>
+      <p>Spécialiste du déblocage administratif. Dossiers ANEF, Préfecture, Démarches Simplifiées.</p>
+    </div>
+    <div class="ft-col">
+      <h4>Services</h4>
+      <a href="#">Déblocage ANEF</a>
+      <a href="#">Rendez-vous Préfecture</a>
+      <a href="#">Recours Administratif</a>
+      <a href="#">Défenseur des Droits</a>
+    </div>
+    <div class="ft-col">
+      <h4>Informations</h4>
+      <a href="#">CGV</a>
+      <a href="#">Confidentialité RGPD</a>
+      <a href="#">Mentions Légales</a>
+      <a href="#">Témoignages</a>
+    </div>
+    <div class="ft-col">
+      <h4>Contact</h4>
+      <a href="mailto:contact@strategix-assistance.fr">contact@strategix-assistance.fr</a>
+      <a href="tel:+33123456789">+33 1 23 45 67 89</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <div class="ft-copy">© 2026 Strategix Assistance. Tous droits réservés.</div>
+    <div class="ft-disc">Cabinet d'assistance administrative. Ne fournit pas de conseil juridique au sens du droit français. Nous ne sommes pas avocats.</div>
+  </div>
+</footer>
+
+<script>
+// ── CURSOR ──
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+let mx=0,my=0,rx=window.innerWidth/2,ry=window.innerHeight/2;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+(function animCur(){
+  rx+=(mx-rx)*.14;ry+=(my-ry)*.14;
+  cur2.style.left=rx+'px';cur2.style.top=ry+'px';
+  requestAnimationFrame(animCur);
+})();
+document.querySelectorAll('.hoverable').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='16px';cur.style.height='16px';cur.style.background='var(--v2)';cur2.style.width='52px';cur2.style.height='52px'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='8px';cur.style.height='8px';cur.style.background='var(--c1)';cur2.style.width='36px';cur2.style.height='36px'});
+});
+
+// ── PARTICLES ──
+const canvas=document.getElementById('hero-canvas');
+const ctx=canvas.getContext('2d');
+let W,H;
+function resizeCanvas(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight}
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
+const pts=[];
+for(let i=0;i<90;i++)pts.push({
+  x:Math.random()*3000,y:Math.random()*1000,
+  vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,
+  r:Math.random()*1.2+.4,
+  a:Math.random()*.4+.08,
+  blue:Math.random()>.5
+});
+function drawPts(){
+  ctx.clearRect(0,0,W,H);
+  pts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+    if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=p.blue?`rgba(99,138,255,${p.a})`:`rgba(0,200,255,${p.a})`;
+    ctx.fill();
+  });
+  for(let i=0;i<pts.length;i++){
+    for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<130){
+        ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle=`rgba(99,138,255,${(1-d/130)*.1})`;ctx.lineWidth=.5;ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawPts);
+}drawPts();
+
+// ── 3D CARD PARALLAX ──
+const card=document.getElementById('card3d');
+let targetRX=0,targetRY=0,curRX=0,curRY=0;
+const heroEl=document.querySelector('.hero');
+heroEl.addEventListener('mousemove',e=>{
+  const r=heroEl.getBoundingClientRect();
+  const xPct=(e.clientX-r.left)/r.width-.5;
+  const yPct=(e.clientY-r.top)/r.height-.5;
+  targetRX=yPct*-22;targetRY=xPct*28;
+});
+heroEl.addEventListener('mouseleave',()=>{targetRX=0;targetRY=0});
+(function animCard(){
+  curRX+=(targetRX-curRX)*.08;
+  curRY+=(targetRY-curRY)*.08;
+  if(card)card.style.transform=`rotateX(${curRX}deg) rotateY(${curRY}deg)`;
+  requestAnimationFrame(animCard);
+})();
+
+// ── SCROLL REVEAL ──
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.from-left,.from-right,.from-bottom').forEach(el=>obs.observe(el));
+
+// ── COUNTERS ──
+function countUp(el,target,suffix,dur){
+  let v=0;const step=target/(dur/16);
+  const t=setInterval(()=>{v=Math.min(v+step,target);el.textContent=Math.round(v)+suffix;if(v>=target)clearInterval(t)},16);
+}
+const numsObs=new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting){
+    countUp(document.getElementById('n1'),95,'%',1400);
+    countUp(document.getElementById('n2'),1500,'+',1800);
+    countUp(document.getElementById('n3'),30,'j',1000);
+    numsObs.disconnect();
+  }
+},{threshold:.5});
+const numsEl=document.querySelector('.nums');
+if(numsEl)numsObs.observe(numsEl);
+
+// ── FAQ ──
+function toggleFaq(el){
+  const item=el.closest('.faq-item');
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!isOpen)item.classList.add('open');
+}
+
+// ── MOBILE MENU ──
+function toggleMenu(){document.getElementById('mob-menu').classList.toggle('open')}
+
+// ── NAVBAR SHRINK ──
+window.addEventListener('scroll',()=>{
+  const nav=document.getElementById('nav');
+  if(window.scrollY>60){nav.style.height='58px';nav.style.background='rgba(4,6,15,.92)'}
+  else{nav.style.height='72px';nav.style.background='rgba(4,6,15,.6)'}
+});
+
+// ── PROGRESS BAR ANIMATE ON SCROLL ──
+const barObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.fv-bar-fill').forEach(bar=>{
+        const w=bar.style.width;bar.style.width='0';
+        setTimeout(()=>{bar.style.width=w},100);
+      });
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('.feat-visual').forEach(el=>barObs.observe(el));
+</script>
+</body>
+</html>
