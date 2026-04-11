@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategix Assistance — Déblocage Administratif</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0A0C14;
+  --ink2:#1C1F2E;
+  --ink3:#3A3D52;
+  --muted:#7C7F96;
+  --subtle:#B8BAC8;
+  --line:#E4E5EE;
+  --soft:#F2F3F8;
+  --paper:#FAFBFF;
+  --white:#FFFFFF;
+  --blue:#1A2EFF;
+  --blue2:#3B52FF;
+  --blue-light:#EEF0FF;
+  --cyan:#00C4F0;
+  --cyan-light:#E6F9FF;
+  --violet:#7C1FFF;
+  --violet-light:#F3EEFF;
+  --green:#00C47A;
+  --green-light:#E6FBF3;
+  --amber:#F59E0B;
+  --amber-light:#FEF8E8;
+  --red:#FF3B6E;
+  --r:16px;
+  --shadow-sm:0 1px 3px rgba(10,12,20,.06),0 1px 2px rgba(10,12,20,.04);
+  --shadow-md:0 4px 16px rgba(10,12,20,.08),0 2px 8px rgba(10,12,20,.04);
+  --shadow-lg:0 20px 60px rgba(10,12,20,.1),0 8px 24px rgba(10,12,20,.06);
+  --shadow-xl:0 40px 100px rgba(10,12,20,.12),0 16px 40px rgba(10,12,20,.08);
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
+
+/* ── CURSOR ── */
+#cur{position:fixed;pointer-events:none;z-index:9999;width:8px;height:8px;border-radius:50%;background:var(--blue);transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s,border-radius .2s}
+#cur2{position:fixed;pointer-events:none;z-index:9998;width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(26,46,255,.25);transform:translate(-50%,-50%);transition:transform .45s cubic-bezier(.23,1,.32,1)}
+body.hovering #cur{width:12px;height:12px;background:var(--violet)}
+body.hovering #cur2{width:56px;height:56px;border-color:rgba(124,31,255,.2)}
+
+/* ── NOISE OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ── NAV ── */
+#nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 56px;height:70px;display:flex;align-items:center;justify-content:space-between;background:rgba(250,251,255,.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--line);transition:all .3s}
+#nav.scrolled{height:60px;background:rgba(250,251,255,.96);box-shadow:var(--shadow-sm)}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-logo-mark{width:36px;height:36px;border-radius:10px;background:var(--ink);display:flex;align-items:center;justify-content:center;transition:.3s;flex-shrink:0}
+.nav-logo-mark svg{width:17px;height:17px}
+.nav-logo-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--ink);letter-spacing:.3px}
+.nav-logo-sub{font-size:9px;font-weight:500;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-top:1px}
+.nav-links{display:flex;gap:36px}
+.nav-links a{font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;letter-spacing:.3px;transition:.2s;padding:4px 0;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--blue);transition:.3s;border-radius:1px}
+.nav-links a:hover{color:var(--ink)}.nav-links a:hover::after{width:100%}
+.nav-cta{display:flex;align-items:center;gap:10px;padding:9px 22px;border-radius:50px;background:var(--ink);color:#fff;font-size:12px;font-weight:700;letter-spacing:.6px;border:none;cursor:none;font-family:'DM Sans',sans-serif;transition:.3s;position:relative;overflow:hidden}
+.nav-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--blue),var(--violet));opacity:0;transition:.3s}
+.nav-cta span{position:relative;z-index:1}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,46,255,.25)}.nav-cta:hover::before{opacity:1}
+#ham{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px}
+#ham span{display:block;width:22px;height:1.5px;background:var(--ink);border-radius:2px;transition:.3s}
+#mob{display:none;position:fixed;inset:0;z-index:499;background:var(--white);flex-direction:column;align-items:center;justify-content:center;gap:36px}
+#mob.open{display:flex}
+#mob a{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--ink);text-decoration:none;transition:.2s}
+#mob a:hover{color:var(--blue)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px;padding:100px 56px 80px;position:relative;overflow:hidden;background:var(--paper)}
+.hero-bg-decor{position:absolute;inset:0;pointer-events:none;z-index:0}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(90px);animation:blobFloat 8s ease-in-out infinite}
+.hb1{width:600px;height:600px;top:-100px;right:-50px;background:radial-gradient(circle,rgba(26,46,255,.06) 0%,transparent 70%);animation-delay:0s}
+.hb2{width:400px;height:400px;bottom:-100px;left:10%;background:radial-gradient(circle,rgba(124,31,255,.05) 0%,transparent 70%);animation-delay:3s}
+.hb3{width:300px;height:300px;top:30%;left:30%;background:radial-gradient(circle,rgba(0,196,240,.05) 0%,transparent 70%);animation-delay:5s}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(20px,-20px) scale(1.03)}66%{transform:translate(-15px,15px) scale(.97)}}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:72px 72px;opacity:.5;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 80%)}
+.hero-left{position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:50px;background:var(--white);border:1.5px solid var(--line);box-shadow:var(--shadow-sm);font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:2px;text-transform:uppercase;margin-bottom:32px}
+.badge-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,196,122,.5)}50%{box-shadow:0 0 0 5px rgba(0,196,122,0)}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(40px,4.8vw,72px);font-weight:800;line-height:1.0;letter-spacing:-2px;margin-bottom:24px;color:var(--ink)}
+.hero h1 .line-blue{display:block;color:var(--blue)}
+.hero h1 .line-stroke{display:block;-webkit-text-stroke:2px var(--ink);color:transparent}
+.hero-sub{font-size:16px;line-height:1.85;color:var(--muted);max-width:440px;margin-bottom:40px;font-weight:400}
+.hero-sub strong{color:var(--ink);font-weight:600}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:60px}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;border-radius:14px;background:var(--ink);color:#fff;font-size:14px;font-weight:700;border:none;cursor:none;font-family:'DM Sans',sans-serif;transition:.3s;position:relative;overflow:hidden;letter-spacing:.2px}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--blue),var(--violet));opacity:0;transition:.3s}
+.btn-primary>*{position:relative;z-index:1}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(26,46,255,.2)}.btn-primary:hover::before{opacity:1}
+.btn-secondary{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;border-radius:14px;background:var(--white);color:var(--ink);font-size:14px;font-weight:600;border:1.5px solid var(--line);cursor:none;font-family:'DM Sans',sans-serif;transition:.3s;box-shadow:var(--shadow-sm)}
+.btn-secondary:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.hero-stats{display:flex;gap:0}
+.hstat{padding:0 32px;border-right:1.5px solid var(--line)}
+.hstat:first-child{padding-left:0}.hstat:last-child{border:none}
+.hstat-n{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--ink);line-height:1}
+.hstat-n span{font-size:18px;color:var(--blue)}
+.hstat-l{font-size:11px;font-weight:500;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:1.5px}
+
+/* ── HERO CARD ── */
+.hero-right{position:relative;z-index:2;display:flex;justify-content:center;align-items:center}
+.scene{width:100%;max-width:440px;perspective:1200px}
+#card3d{transform-style:preserve-3d;transition:transform .08s linear;animation:cardFloat 7s ease-in-out infinite;will-change:transform}
+@keyframes cardFloat{0%,100%{transform:rotateX(3deg) rotateY(-5deg)}40%{transform:rotateX(5deg) rotateY(4deg)}70%{transform:rotateX(2deg) rotateY(-2deg)}}
+.card3d-inner{
+  background:var(--white);border-radius:24px;padding:28px;
+  border:1.5px solid var(--line);
+  box-shadow:var(--shadow-xl),0 0 0 1px rgba(255,255,255,.8) inset;
+  position:relative;overflow:hidden;
+}
+.card3d-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet))}
+.c3-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px}
+.c3-dossier{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:4px}
+.c3-prefecture{font-size:14px;font-weight:700;color:var(--ink)}
+.c3-badge{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:var(--green-light);border:1px solid rgba(0,196,122,.2);font-size:10px;font-weight:800;color:var(--green);letter-spacing:1.5px;text-transform:uppercase}
+.c3-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.c3-prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.c3-prog-label{font-size:12px;font-weight:500;color:var(--ink3)}
+.c3-prog-pct{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--blue)}
+.c3-track{height:6px;background:var(--soft);border-radius:3px;margin-bottom:24px;overflow:hidden}
+.c3-fill{height:100%;width:85%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--cyan));position:relative;animation:fillShimmer 3s ease-in-out infinite}
+@keyframes fillShimmer{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15)}}
+.c3-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+.c3-step{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;transition:.3s}
+.c3-step.done{background:var(--green-light)}
+.c3-step.active{background:var(--blue-light)}
+.c3-step.pending{background:var(--soft)}
+.c3-step-icon{width:26px;height:26px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.c3-step.done .c3-step-icon{background:var(--green)}
+.c3-step.active .c3-step-icon{background:var(--blue)}
+.c3-step.pending .c3-step-icon{background:var(--line)}
+.c3-step-icon svg{width:12px;height:12px;stroke:#fff}
+.c3-step-text{font-size:12px;font-weight:600}
+.c3-step.done .c3-step-text{color:var(--green)}
+.c3-step.active .c3-step-text{color:var(--blue)}
+.c3-step.pending .c3-step-text{color:var(--subtle)}
+.c3-cta{width:100%;padding:14px;border-radius:14px;border:none;cursor:none;background:var(--ink);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:.3s;position:relative;overflow:hidden}
+.c3-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--blue),var(--violet));opacity:0;transition:.3s}
+.c3-cta span{position:relative;z-index:1}
+.c3-cta:hover::before{opacity:1}.c3-cta:hover{box-shadow:0 8px 28px rgba(26,46,255,.25)}
+/* Float mini cards */
+.mc{position:absolute;background:var(--white);border:1.5px solid var(--line);border-radius:14px;padding:10px 16px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;white-space:nowrap}
+.mc1{bottom:-20px;left:-40px;animation:mcf1 4s ease-in-out infinite}
+.mc2{top:-14px;right:-30px;animation:mcf2 3.5s ease-in-out infinite}
+@keyframes mcf1{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(1deg)}}
+@keyframes mcf2{0%,100%{transform:translateY(0) rotate(1.5deg)}50%{transform:translateY(8px) rotate(-1deg)}}
+.mc-ic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mc-ic svg{width:15px;height:15px}
+.mc-ic.g{background:var(--green-light)}.mc-ic.g svg{stroke:var(--green)}
+.mc-ic.b{background:var(--blue-light)}.mc-ic.b svg{stroke:var(--blue)}
+.mc-val{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--ink);line-height:1}
+.mc-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:2px}
+/* scroll hint */
+.scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2;opacity:.35}
+.s-mouse{width:22px;height:34px;border:1.5px solid var(--subtle);border-radius:11px;display:flex;align-items:flex-start;justify-content:center;padding-top:6px}
+.s-wheel{width:3px;height:6px;background:var(--muted);border-radius:2px;animation:sWheel 2s ease-in-out infinite}
+@keyframes sWheel{0%{opacity:1;transform:translateY(0)}80%{opacity:0;transform:translateY(10px)}100%{opacity:0}}
+.s-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+
+/* ── TRUST BAR ── */
+.trust{padding:20px 56px;background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:20px}
+.trust-item{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:500;color:var(--muted)}
+.trust-item svg{width:15px;height:15px;stroke:var(--blue);flex-shrink:0}
+
+/* ── SECTIONS ── */
+.sec{padding:100px 56px;position:relative;overflow:hidden}
+.sec-chip{display:inline-block;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:var(--blue);background:var(--blue-light);padding:5px 14px;border-radius:50px;margin-bottom:16px}
+.sec-title{font-family:'Syne',sans-serif;font-size:clamp(30px,3.8vw,52px);font-weight:800;line-height:1.05;margin-bottom:14px;letter-spacing:-1.5px;color:var(--ink)}
+.sec-sub{font-size:15px;color:var(--muted);max-width:480px;line-height:1.8}
+.txt-blue{color:var(--blue)}
+.txt-violet{color:var(--violet)}
+
+/* ── REVEAL ── */
+.from-left{opacity:0;transform:translateX(-50px);transition:opacity .8s cubic-bezier(.23,1,.32,1),transform .8s cubic-bezier(.23,1,.32,1)}
+.from-right{opacity:0;transform:translateX(50px);transition:opacity .8s cubic-bezier(.23,1,.32,1),transform .8s cubic-bezier(.23,1,.32,1)}
+.from-bottom{opacity:0;transform:translateY(40px);transition:opacity .75s cubic-bezier(.23,1,.32,1),transform .75s cubic-bezier(.23,1,.32,1)}
+.from-left.vis,.from-right.vis,.from-bottom.vis{opacity:1;transform:translate(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
+
+/* ── PROBLEMS ── */
+.prob-bg{background:var(--white)}
+.prob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:60px}
+.prob-card{
+  background:var(--paper);border:1.5px solid var(--line);border-radius:20px;padding:30px 24px;
+  position:relative;overflow:hidden;transition:.4s;cursor:none;
+}
+.prob-card:hover{background:var(--white);border-color:var(--blue);transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.prob-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2.5px;background:linear-gradient(90deg,var(--blue),var(--cyan));transform:scaleX(0);transform-origin:left;transition:.4s;border-radius:2px}
+.prob-card:hover::after{transform:scaleX(1)}
+.prob-n{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;color:var(--subtle);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}
+.prob-ic{width:50px;height:50px;border-radius:14px;margin-bottom:18px;display:flex;align-items:center;justify-content:center;background:var(--soft);border:1.5px solid var(--line);transition:.35s}
+.prob-ic svg{width:22px;height:22px;stroke:var(--ink3);transition:.35s}
+.prob-card:hover .prob-ic{background:var(--blue);border-color:var(--blue);transform:scale(1.05) rotate(-4deg);box-shadow:0 8px 20px rgba(26,46,255,.25)}
+.prob-card:hover .prob-ic svg{stroke:#fff}
+.prob-card h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.prob-card p{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* ── FEATURES ── */
+.feat-sec{background:var(--paper)}
+.feat-row{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;padding:80px 0;border-bottom:1px solid var(--line)}
+.feat-row:last-child{border:none}
+.feat-row.rev .feat-text{order:2}.feat-row.rev .feat-vis{order:1}
+.feat-chip{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;color:var(--blue);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:16px;display:block}
+.feat-title{font-family:'Syne',sans-serif;font-size:clamp(24px,2.8vw,38px);font-weight:800;line-height:1.1;margin-bottom:16px;color:var(--ink);letter-spacing:-.5px}
+.feat-desc{font-size:14px;color:var(--muted);line-height:1.85;margin-bottom:28px}
+.feat-points{display:flex;flex-direction:column;gap:12px}
+.feat-pt{display:flex;align-items:flex-start;gap:12px}
+.feat-pt-ic{width:30px;height:30px;border-radius:9px;flex-shrink:0;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin-top:1px;flex-shrink:0}
+.feat-pt-ic svg{width:13px;height:13px;stroke:var(--blue);stroke-width:2.5}
+.feat-pt-txt{font-size:13px;color:var(--ink3);line-height:1.6;padding-top:7px;font-weight:500}
+/* Feature panels */
+.feat-vis{background:var(--white);border:1.5px solid var(--line);border-radius:24px;padding:28px;position:relative;overflow:hidden;min-height:280px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow-md)}
+.feat-vis::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.fv-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.fv-ttl{font-size:12px;font-weight:700;color:var(--ink)}
+.fv-st{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:var(--green)}
+.fv-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.fv-bar-row{margin-bottom:14px}
+.fv-bar-lbl{display:flex;justify-content:space-between;margin-bottom:6px}
+.fv-bar-lbl span{font-size:11px;color:var(--muted);font-weight:500}
+.fv-bar-lbl strong{font-size:11px;color:var(--ink);font-weight:700}
+.fv-bar{height:7px;background:var(--soft);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.fv-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width 1.5s cubic-bezier(.23,1,.32,1)}
+.fv-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.fv-tag{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;border:1.5px solid var(--line);background:var(--soft)}
+.fv-tag.ok{background:var(--green-light);border-color:rgba(0,196,122,.2);color:var(--green)}
+.fv-tag.ok svg{stroke:var(--green)}
+.fv-tag.warn{background:var(--amber-light);border-color:rgba(245,158,11,.2);color:var(--amber)}
+.fv-tag.warn svg{stroke:var(--amber)}
+.fv-tag svg{width:11px;height:11px;stroke:var(--muted);stroke-width:2.5}
+.fv-tl{display:flex;flex-direction:column;gap:0}
+.fv-tl-item{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}
+.fv-tl-item:last-child{border:none}
+.fv-tl-dot{width:10px;height:10px;border-radius:50%;margin-top:3px;flex-shrink:0}
+.fv-tl-dot.done{background:var(--green);box-shadow:0 0 0 3px rgba(0,196,122,.15)}
+.fv-tl-dot.active{background:var(--blue);box-shadow:0 0 0 3px rgba(26,46,255,.15);animation:dotPulse 2s infinite}
+.fv-tl-dot.pend{background:var(--line)}
+@keyframes dotPulse{0%,100%{box-shadow:0 0 0 3px rgba(26,46,255,.15)}50%{box-shadow:0 0 0 7px rgba(26,46,255,.07)}}
+.fv-tl-txt{font-size:12px;font-weight:600;padding-top:2px}
+.fv-tl-txt.done{color:var(--ink3)}
+.fv-tl-txt.active{color:var(--blue)}
+.fv-tl-txt.pend{color:var(--subtle)}
+.fv-docs{display:flex;flex-direction:column;gap:8px}
+.fv-doc{display:flex;align-items:center;justify-content:space-between;background:var(--soft);border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;transition:.3s}
+.fv-doc:hover{border-color:var(--blue);background:var(--blue-light)}
+.fv-doc-l{display:flex;align-items:center;gap:10px}
+.fv-doc-ic{width:28px;height:28px;border-radius:8px;background:var(--white);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.fv-doc-ic svg{width:12px;height:12px;stroke:var(--blue)}
+.fv-doc-name{font-size:12px;font-weight:600;color:var(--ink)}
+.fv-doc-size{font-size:10px;color:var(--muted);margin-top:1px}
+.fv-doc-ok{width:20px;height:20px;border-radius:50%;background:var(--green-light);border:1.5px solid rgba(0,196,122,.2);display:flex;align-items:center;justify-content:center}
+.fv-doc-ok svg{width:10px;height:10px;stroke:var(--green);stroke-width:3}
+
+/* ── SERVICES ── */
+.srv-sec{background:var(--white)}
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:60px}
+.srv-card{background:var(--paper);border:1.5px solid var(--line);border-radius:20px;padding:30px 24px;transition:.4s;cursor:none;position:relative;overflow:hidden}
+.srv-card:hover{background:var(--white);border-color:var(--blue);transform:translateY(-8px);box-shadow:var(--shadow-lg)}
+.srv-n{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;color:var(--subtle);letter-spacing:2px;text-transform:uppercase;margin-bottom:18px}
+.srv-ic{width:52px;height:52px;border-radius:14px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;background:var(--soft);border:1.5px solid var(--line);transition:.35s}
+.srv-ic svg{width:23px;height:23px;stroke:var(--ink3);transition:.35s}
+.srv-card:hover .srv-ic{background:var(--ink);border-color:var(--ink);transform:rotate(-5deg) scale(1.05);box-shadow:0 8px 24px rgba(10,12,20,.2)}
+.srv-card:hover .srv-ic svg{stroke:#fff}
+.srv-card h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.srv-card p{font-size:12px;color:var(--muted);line-height:1.7}
+.srv-tag{display:inline-block;margin-top:16px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);background:var(--blue-light);padding:4px 12px;border-radius:20px}
+
+/* ── NUMBERS ── */
+.nums-sec{
+  padding:90px 56px;
+  background:var(--ink);
+  position:relative;overflow:hidden;
+}
+.nums-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:60px 60px}
+.nums-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;position:relative;z-index:1}
+.num-item{text-align:center;position:relative}
+.num-item::after{content:'';position:absolute;right:0;top:10%;bottom:10%;width:1px;background:rgba(255,255,255,.08)}
+.num-item:last-child::after{display:none}
+.num-val{font-family:'Syne',sans-serif;font-size:clamp(48px,6vw,80px);font-weight:800;line-height:1;color:#fff;margin-bottom:8px}
+.num-val .accent{color:var(--cyan)}
+.num-lbl{font-size:11px;font-weight:500;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:2px}
+
+/* ── TESTIMONIALS ── */
+.testi-sec{background:var(--paper)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:60px}
+.testi-card{background:var(--white);border:1.5px solid var(--line);border-radius:20px;padding:28px;transition:.35s;position:relative;overflow:hidden;cursor:none}
+.testi-card:hover{transform:translateY(-6px);border-color:var(--blue);box-shadow:var(--shadow-lg)}
+.testi-q{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:var(--blue-light);line-height:.7;margin-bottom:12px;user-select:none}
+.testi-txt{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:18px;font-style:italic}
+.testi-stars{display:flex;gap:3px;margin-bottom:16px}
+.testi-stars svg{width:13px;height:13px;fill:var(--amber);stroke:none}
+.testi-author{display:flex;align-items:center;gap:12px}
+.testi-av{width:42px;height:42px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.testi-name{font-size:13px;font-weight:700;color:var(--ink)}
+.testi-role{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* ── FAQ ── */
+.faq-sec{background:var(--white)}
+.faq-inner{display:grid;grid-template-columns:1fr 1.1fr;gap:80px;align-items:start;margin-top:60px}
+.faq-list{display:flex;flex-direction:column;gap:10px}
+.faq-item{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;transition:.3s}
+.faq-item.open{background:var(--white);border-color:var(--blue);box-shadow:var(--shadow-md)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:none;font-size:14px;font-weight:600;color:var(--ink3);transition:.25s}
+.faq-item.open .faq-q{color:var(--ink)}
+.faq-arrow{width:24px;height:24px;border-radius:7px;background:var(--soft);display:flex;align-items:center;justify-content:center;transition:.3s;flex-shrink:0}
+.faq-arrow svg{width:12px;height:12px;stroke:var(--muted);transition:.3s}
+.faq-item.open .faq-arrow{background:var(--blue);transform:rotate(45deg)}.faq-item.open .faq-arrow svg{stroke:#fff}
+.faq-a{max-height:0;overflow:hidden;transition:.4s cubic-bezier(.23,1,.32,1);font-size:13px;color:var(--muted);line-height:1.8;padding:0 22px}
+.faq-item.open .faq-a{max-height:200px;padding:0 22px 18px}
+.faq-right{background:var(--ink);border-radius:24px;padding:36px;position:sticky;top:90px;overflow:hidden}
+.faq-right::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet))}
+.faq-right-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 0% 100%,rgba(26,46,255,.1),transparent)}
+.faq-cta-ic{width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative;z-index:1}
+.faq-cta-ic svg{width:24px;height:24px;stroke:#fff}
+.faq-right h3{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:10px;position:relative;z-index:1}
+.faq-right p{font-size:13px;color:rgba(255,255,255,.45);line-height:1.75;margin-bottom:24px;position:relative;z-index:1}
+.faq-contact{display:flex;flex-direction:column;gap:10px;position:relative;z-index:1}
+.faq-contact-item{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.55);font-weight:500}
+.faq-contact-item svg{width:15px;height:15px;stroke:var(--cyan);flex-shrink:0}
+
+/* ── PRICING ── */
+.price-sec{background:var(--paper)}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:60px;align-items:start}
+.price-card{background:var(--white);border:1.5px solid var(--line);border-radius:22px;padding:36px 28px;transition:.4s;position:relative;overflow:hidden;cursor:none}
+.price-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.price-card.feat{background:var(--ink);transform:scale(1.03)}
+.price-card.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet))}
+.price-card.feat:hover{transform:scale(1.03) translateY(-6px);box-shadow:0 40px 80px rgba(10,12,20,.25)}
+.pc-badge{position:absolute;top:18px;right:18px;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:20px}
+.pc-plan{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.price-card.feat .pc-plan{color:rgba(255,255,255,.5)}
+.pc-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--ink);margin-bottom:24px}
+.price-card.feat .pc-name{color:#fff}
+.pc-price{display:flex;align-items:flex-start;gap:3px;margin-bottom:6px}
+.pc-eur{font-size:18px;font-weight:700;color:var(--muted);margin-top:10px}
+.pc-num{font-family:'Syne',sans-serif;font-size:58px;font-weight:800;line-height:1;color:var(--ink)}
+.price-card.feat .pc-num,.price-card.feat .pc-eur{color:#fff}
+.pc-period{font-size:12px;color:var(--muted);margin-bottom:28px}
+.price-card.feat .pc-period{color:rgba(255,255,255,.4)}
+.pc-divider{height:1px;background:var(--line);margin-bottom:22px}
+.price-card.feat .pc-divider{background:rgba(255,255,255,.1)}
+.pc-features{list-style:none;margin-bottom:28px;display:flex;flex-direction:column}
+.pc-features li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);padding:9px 0;border-bottom:1px solid var(--line);font-weight:500}
+.price-card.feat .pc-features li{color:rgba(255,255,255,.65);border-color:rgba(255,255,255,.07)}
+.pc-features li:last-child{border:none}
+.price-card.feat .pc-features li:last-child{border:none}
+.pc-chk{flex-shrink:0;width:18px;height:18px;margin-top:1px;display:flex;align-items:center;justify-content:center;background:var(--green-light);border-radius:50%}
+.pc-chk svg{width:10px;height:10px;stroke:var(--green);stroke-width:3}
+.price-card.feat .pc-chk{background:rgba(255,255,255,.1)}
+.price-card.feat .pc-chk svg{stroke:var(--cyan)}
+.btn-outline{width:100%;padding:14px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:.8px;font-family:'Syne',sans-serif;cursor:none;border:1.5px solid var(--line);background:transparent;color:var(--ink3);transition:.3s;text-transform:uppercase}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue);box-shadow:0 0 0 4px rgba(26,46,255,.06)}
+.btn-white{width:100%;padding:14px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:.8px;font-family:'Syne',sans-serif;cursor:none;border:none;background:#fff;color:var(--ink);transition:.3s;text-transform:uppercase;position:relative;overflow:hidden}
+.btn-white:hover{box-shadow:0 0 0 4px rgba(255,255,255,.15);transform:translateY(-2px)}
+
+/* ── CTA FINAL ── */
+.cta-final{padding:120px 56px;text-align:center;position:relative;overflow:hidden;background:var(--white)}
+.cta-ring{position:absolute;border-radius:50%;border:1px solid rgba(26,46,255,.06);top:50%;left:50%;transform:translate(-50%,-50%);animation:ringP 5s ease-in-out infinite;pointer-events:none}
+.cta-ring.r1{width:200px;height:200px}.cta-ring.r2{width:400px;height:400px;animation-delay:.7s}.cta-ring.r3{width:600px;height:600px;animation-delay:1.4s}.cta-ring.r4{width:900px;height:900px;animation-delay:2.1s}
+@keyframes ringP{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:.15;transform:translate(-50%,-50%) scale(1.03)}}
+.cta-final h2{font-family:'Syne',sans-serif;font-size:clamp(34px,5vw,64px);font-weight:800;color:var(--ink);margin-bottom:16px;position:relative;line-height:1.05;letter-spacing:-2px}
+.cta-final p{font-size:16px;color:var(--muted);max-width:400px;margin:0 auto 48px;position:relative;line-height:1.8}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* ── FOOTER ── */
+footer{background:var(--ink);padding:72px 56px 36px;border-top:1px solid rgba(255,255,255,.06)}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.ft-brand p{font-size:13px;color:rgba(255,255,255,.3);line-height:1.8;margin-top:14px;max-width:220px}
+.ft-col h4{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:16px;font-weight:700;font-family:'Syne',sans-serif}
+.ft-col a{display:block;font-size:12px;color:rgba(255,255,255,.35);text-decoration:none;margin-bottom:9px;transition:.2s;font-weight:500}
+.ft-col a:hover{color:rgba(255,255,255,.8)}
+.ft-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.06);gap:20px;flex-wrap:wrap}
+.ft-copy{font-size:11px;color:rgba(255,255,255,.2)}
+.ft-disc{font-size:11px;color:rgba(255,255,255,.18);max-width:380px;text-align:right;line-height:1.7}
+
+/* ── MOBILE ── */
+@media(max-width:1100px){
+  .hero{grid-template-columns:1fr;padding:100px 40px 80px}.hero-right{display:none}
+  .feat-row,.feat-row.rev{grid-template-columns:1fr;gap:36px}
+  .feat-row.rev .feat-text{order:1}.feat-row.rev .feat-vis{order:2}
+  .prob-grid,.srv-grid,.testi-grid{grid-template-columns:repeat(2,1fr)}
+  .price-grid{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto}
+  .price-card.feat{transform:scale(1)}.price-card.feat:hover{transform:translateY(-6px)}
+  .nums-inner{grid-template-columns:repeat(2,1fr)}
+  .faq-inner{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  #nav{padding:0 20px}.nav-links,.nav-cta{display:none}#ham{display:flex}
+  .hero{padding:88px 24px 80px}.hero h1{font-size:38px;letter-spacing:-1.5px}
+  .hero-btns{flex-direction:column;align-items:flex-start}
+  .hero-stats{gap:0}.hstat{padding:0 18px}
+  .trust{padding:16px 24px}
+  .sec{padding:70px 24px}
+  .nums-sec{padding:60px 24px}
+  .prob-grid,.srv-grid,.testi-grid{grid-template-columns:1fr}
+  .faq-right{position:relative;top:0}
+  .ft-grid{grid-template-columns:1fr;gap:28px}.ft-disc{text-align:left}
+  .ft-bottom{flex-direction:column;align-items:flex-start}
+  .cta-final{padding:80px 24px}
+  .cta-btns{flex-direction:column;align-items:center}
+  footer{padding:60px 24px 32px}
+  .feat-row{padding:50px 0;gap:28px}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur2"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo hoverable" href="#">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" width="17" height="17"><path d="M9 2L15 5.5V12.5L9 16L3 12.5V5.5L9 2Z"/><path d="M9 7V11M7 9H11" stroke-width="1.5"/></svg>
+    </div>
+    <div>
+      <div class="nav-logo-name">Strategix Assistance</div>
+      <div class="nav-logo-sub">Cabinet Administratif · France</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#services" class="hoverable">Services</a>
+    <a href="#blocage" class="hoverable">Blocage</a>
+    <a href="#tarifs" class="hoverable">Tarifs</a>
+    <a href="#temoignages" class="hoverable">Témoignages</a>
+  </div>
+  <button class="nav-cta hoverable"><span>Analyse Gratuite →</span></button>
+  <div id="ham" class="hoverable" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div id="mob">
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#blocage" onclick="toggleMenu()">Blocage</a>
+  <a href="#tarifs" onclick="toggleMenu()">Tarifs</a>
+  <a href="#temoignages" onclick="toggleMenu()">Témoignages</a>
+  <button class="btn-primary" style="font-size:14px;padding:14px 36px"><span>Analyse Gratuite →</span></button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-decor">
+    <div class="hero-blob hb1"></div>
+    <div class="hero-blob hb2"></div>
+    <div class="hero-blob hb3"></div>
+    <div class="hero-grid"></div>
+  </div>
+
+  <div class="hero-left">
+    <div class="hero-badge from-left">
+      <span class="badge-pulse"></span>
+      Cabinet administratif certifié
+    </div>
+    <h1>
+      <span class="from-left d1">Votre dossier</span>
+      <span class="line-blue from-left d2">préfecture</span>
+      <span class="line-stroke from-left d3">est bloqué ?</span>
+    </h1>
+    <p class="hero-sub from-left d2">Plus de récépissé, <strong>silence administratif</strong>, situation figée depuis des mois. Nous activons les leviers juridiques pour obtenir une réponse rapide.</p>
+    <div class="hero-btns from-left d3">
+      <button class="btn-primary hoverable">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>Analyse Gratuite</span>
+      </button>
+      <button class="btn-secondary hoverable">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Comment ça marche
+      </button>
+    </div>
+    <div class="hero-stats from-left d4">
+      <div class="hstat"><div class="hstat-n">95<span>%</span></div><div class="hstat-l">Succès</div></div>
+      <div class="hstat"><div class="hstat-n">1500<span>+</span></div><div class="hstat-l">Dossiers</div></div>
+      <div class="hstat"><div class="hstat-n">&lt;30<span>j</span></div><div class="hstat-l">Réponse</div></div>
+    </div>
+  </div>
+
+  <div class="hero-right from-right d1">
+    <div class="scene">
+      <div id="card3d">
+        <div class="mc mc1">
+          <div class="mc-ic g"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div><div class="mc-val">95%</div><div class="mc-lbl">Taux succès</div></div>
+        </div>
+        <div class="mc mc2">
+          <div class="mc-ic b"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><div class="mc-val">&lt;30j</div><div class="mc-lbl">Réponse moy.</div></div>
+        </div>
+        <div class="card3d-inner">
+          <div class="c3-header">
+            <div>
+              <div class="c3-dossier">Dossier #2024-8847</div>
+              <div class="c3-prefecture">Préfecture de Nanterre</div>
+            </div>
+            <div class="c3-badge"><span class="c3-dot"></span>VALIDÉ</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-size:12px;font-weight:500;color:var(--ink3)">Instruction en cours</span>
+            <span style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--blue)">85%</span>
+          </div>
+          <div class="c3-track"><div class="c3-fill"></div></div>
+          <div class="c3-steps">
+            <div class="c3-step done">
+              <div class="c3-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="c3-step-text">Dossier ANEF soumis & corrigé</div>
+            </div>
+            <div class="c3-step done">
+              <div class="c3-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="c3-step-text">Relances officielles envoyées</div>
+            </div>
+            <div class="c3-step active">
+              <div class="c3-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div class="c3-step-text">Saisine Défenseur des Droits</div>
+            </div>
+            <div class="c3-step pending">
+              <div class="c3-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg></div>
+              <div class="c3-step-text">Recours Tribunal Administratif</div>
+            </div>
+          </div>
+          <button class="c3-cta hoverable"><span>DÉBLOQUER MON DOSSIER →</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="s-mouse"><div class="s-wheel"></div></div>
+    <div class="s-label">Scroll</div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust">
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement sécurisé Stripe</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Conforme RGPD</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Droit administratif français</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.5a19.79 19.79 0 0 1-3-8.59A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Support 24h/7j</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Sans frais cachés</div>
+</div>
+
+<!-- PROBLEMS -->
+<section class="sec prob-bg" id="blocage">
+  <div style="text-align:center;margin-bottom:8px"><span class="sec-chip from-bottom">Le Blocage Administratif</span></div>
+  <h2 class="sec-title from-bottom" style="text-align:center">Reconnaissez-vous <br><span class="txt-blue">votre situation ?</span></h2>
+  <p class="sec-sub from-bottom d1" style="text-align:center;margin:0 auto">Des milliers de personnes en France attendent des mois sans réponse. Ne laissez pas le silence détruire votre avenir.</p>
+  <div class="prob-grid">
+    <div class="prob-card from-bottom hoverable">
+      <div class="prob-n">01</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <h3>Attente Interminable</h3>
+      <p>Dossier ANEF en instruction depuis plus de 6 mois sans aucune réponse de la préfecture.</p>
+    </div>
+    <div class="prob-card from-bottom d1 hoverable">
+      <div class="prob-n">02</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <h3>Rendez-vous Impossible</h3>
+      <p>Impossible d'obtenir un créneau sur le site de la préfecture malgré des mois de tentatives.</p>
+    </div>
+    <div class="prob-card from-bottom d2 hoverable">
+      <div class="prob-n">03</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <h3>Plus de Récépissé</h3>
+      <p>Votre titre de séjour a expiré. Vous n'avez reçu ni prolongation ni nouveau récépissé.</p>
+    </div>
+    <div class="prob-card from-bottom hoverable">
+      <div class="prob-n">04</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+      <h3>Risque Perte d'Emploi</h3>
+      <p>Votre employeur menace de suspendre votre contrat faute de document valide.</p>
+    </div>
+    <div class="prob-card from-bottom d1 hoverable">
+      <div class="prob-n">05</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg></div>
+      <h3>Silence Administratif</h3>
+      <p>Vos relances restent sans réponse. Vous êtes dans le flou total depuis des semaines.</p>
+    </div>
+    <div class="prob-card from-bottom d2 hoverable">
+      <div class="prob-n">06</div>
+      <div class="prob-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
+      <h3>Situation Bloquée</h3>
+      <p>Pas de voyages, plus de CAF, plus de droits. Votre vie est en suspens.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<div class="feat-sec" id="services">
+  <div class="sec" style="padding-bottom:0">
+    <div style="text-align:center;margin-bottom:8px"><span class="sec-chip from-bottom">Nos Leviers d'Action</span></div>
+    <h2 class="sec-title from-bottom" style="text-align:center">Comment nous <span class="txt-violet">débloquons</span> votre dossier</h2>
+  </div>
+  <div class="sec" style="padding-top:20px;padding-bottom:60px">
+
+    <!-- Row 1 -->
+    <div class="feat-row">
+      <div class="feat-text from-left">
+        <span class="feat-chip">Étape 01</span>
+        <h3 class="feat-title">Audit complet de votre <span class="txt-blue">dossier ANEF</span></h3>
+        <p class="feat-desc">Notre équipe analyse chaque pièce pour identifier exactement ce qui bloque l'instruction. Un diagnostic précis est la base d'une stratégie efficace.</p>
+        <div class="feat-points">
+          <div class="feat-pt"><div class="feat-pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="feat-pt-txt">Vérification de la complétude de chaque document requis</div></div>
+          <div class="feat-pt"><div class="feat-pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="feat-pt-txt">Identification des erreurs bloquantes sur la plateforme ANEF</div></div>
+          <div class="feat-pt"><div class="feat-pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="feat-pt-txt">Rapport détaillé avec stratégie personnalisée sous 48h</div></div>
+        </div>
+      </div>
+      <div class="feat-vis from-right">
+        <div class="fv-hd">
+          <span class="fv-ttl">Audit Dossier ANEF</span>
+          <div class="fv-st"><span class="fv-dot"></span>Analyse en cours</div>
+        </div>
+        <div>
+          <div class="fv-bar-row"><div class="fv-bar-lbl"><span>Documents fournis</span><strong>8/10</strong></div><div class="fv-bar"><div class="fv-fill" style="width:80%"></div></div></div>
+          <div class="fv-bar-row"><div class="fv-bar-lbl"><span>Conformité ANEF</span><strong>92%</strong></div><div class="fv-bar"><div class="fv-fill" style="width:92%"></div></div></div>
+          <div class="fv-bar-row"><div class="fv-bar-lbl"><span>Probabilité déblocage</span><strong>95%</strong></div><div class="fv-bar"><div class="fv-fill" style="width:95%;background:linear-gradient(90deg,var(--violet),var(--red))"></div></div></div>
+        </div>
+        <div class="fv-tags">
+          <div class="fv-tag ok"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Passeport valide</div>
+          <div class="fv-tag ok"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Justificatif domicile</div>
+          <div class="fv-tag warn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Contrat travail manquant</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="feat-row rev">
+      <div class="feat-text from-right">
+        <span class="feat-chip">Étape 02</span>
+        <h3 class="feat-title">Relances officielles & <span class="txt-violet">Défenseur des Droits</span></h3>
+        <p class="feat-desc">Nous rédigeons des courriers recommandés officiels et saisissons le Défenseur des Droits. Ces leviers forcent l'administration à réagir.</p>
+        <div class="feat-points">
+          <div class="feat-pt"><div class="feat-pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="feat-pt-txt">Courriers recommandés ciblés avec accusé de réception</div></div>
+          <div class="feat-pt"><div class="feat-pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="feat-pt-txt">Saisine formelle du Défenseur des Droits en 48h</div></div>
+          <div class="feat-pt"><div class="feat-pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="feat-pt-txt">Suivi et relances jusqu'à obtention d'une réponse écrite</div></div>
+        </div>
+      </div>
+      <div class="feat-vis from-left">
+        <div class="fv-hd">
+          <span class="fv-ttl">Chronologie des actions</span>
+          <div class="fv-st"><span class="fv-dot"></span>En cours</div>
+        </div>
+        <div class="fv-tl">
+          <div class="fv-tl-item"><div class="fv-tl-dot done"></div><div class="fv-tl-txt done">Analyse initiale du dossier — J+0</div></div>
+          <div class="fv-tl-item"><div class="fv-tl-dot done"></div><div class="fv-tl-txt done">Courrier recommandé préfecture — J+3</div></div>
+          <div class="fv-tl-item"><div class="fv-tl-dot done"></div><div class="fv-tl-txt done">Mise en demeure officielle — J+10</div></div>
+          <div class="fv-tl-item"><div class="fv-tl-dot active"></div><div class="fv-tl-txt active">Saisine Défenseur des Droits — J+14</div></div>
+          <div class="fv-tl-item"><div class="fv-tl-dot pend"></div><div class="fv-tl-txt pend">Recours Tribunal Administratif — J+21</div></div>
+          <div class="fv-tl-item"><div class="fv-tl-dot pend"></div><div class="fv-tl-txt pend">Réponse préfecture attendue — J+28</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="feat-row">
+      <div class="feat-text from-left">
+        <span class="feat-chip">Étape 03</span>
+        <h3 class="feat-title">Recours au <span class="txt-blue">Tribunal Administratif</span></h3>
+        <p class="feat-desc">En dernier recours, nous préparons vos recours contentieux devant le Tribunal Administratif. Référé-liberté ou recours pour excès de pouvoir.</p>
+        <div class="feat-points">
+          <div class="feat-pt"><div class="feat-pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="feat-pt-txt">Rédaction du mémoire introductif d'instance</div></div>
+          <div class="feat-pt"><div class="feat-pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="feat-pt-txt">Procédure référé-liberté pour urgence absolue</div></div>
+          <div class="feat-pt"><div class="feat-pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="feat-pt-txt">Orientation vers un avocat partenaire si nécessaire</div></div>
+        </div>
+      </div>
+      <div class="feat-vis from-right">
+        <div class="fv-hd">
+          <span class="fv-ttl">Documents juridiques</span>
+          <div class="fv-st"><span class="fv-dot"></span>Prêts</div>
+        </div>
+        <div class="fv-docs">
+          <div class="fv-doc hoverable">
+            <div class="fv-doc-l"><div class="fv-doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><div class="fv-doc-name">Mémoire TA.pdf</div><div class="fv-doc-size">2.4 MB · Prêt</div></div></div>
+            <div class="fv-doc-ok"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+          <div class="fv-doc hoverable">
+            <div class="fv-doc-l"><div class="fv-doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><div class="fv-doc-name">Référé-liberté.pdf</div><div class="fv-doc-size">1.8 MB · Prêt</div></div></div>
+            <div class="fv-doc-ok"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+          <div class="fv-doc hoverable">
+            <div class="fv-doc-l"><div class="fv-doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><div class="fv-doc-name">Pièces justificatives.zip</div><div class="fv-doc-size">12.1 MB · Prêt</div></div></div>
+            <div class="fv-doc-ok"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="sec srv-sec">
+  <div style="text-align:center;margin-bottom:8px"><span class="sec-chip from-bottom">Tous nos Services</span></div>
+  <h2 class="sec-title from-bottom" style="text-align:center">Une solution pour <span class="txt-blue">chaque situation</span></h2>
+  <div class="srv-grid">
+    <div class="srv-card from-bottom hoverable">
+      <div class="srv-n">Service 01</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+      <h3>Dossiers ANEF</h3>
+      <p>Dépôt complet et correction des dossiers sur la plateforme ANEF pour garantir une instruction fluide.</p>
+      <span class="srv-tag">Accompagnement Expert</span>
+    </div>
+    <div class="srv-card from-bottom d1 hoverable">
+      <div class="srv-n">Service 02</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <h3>Rendez-vous Préfecture</h3>
+      <p>Accompagnement pour obtenir des créneaux en préfecture, même pour les dossiers les plus complexes.</p>
+      <span class="srv-tag">Suivi Personnalisé</span>
+    </div>
+    <div class="srv-card from-bottom d2 hoverable">
+      <div class="srv-n">Service 03</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+      <h3>Relances Officielles</h3>
+      <p>Emails et courriers recommandés ciblés pour forcer l'administration à traiter votre dossier.</p>
+      <span class="srv-tag">Impact Garanti</span>
+    </div>
+    <div class="srv-card from-bottom hoverable">
+      <div class="srv-n">Service 04</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <h3>Défenseur des Droits</h3>
+      <p>Saisine officielle de l'autorité indépendante pour dénoncer le blocage administratif.</p>
+      <span class="srv-tag">Intervention Officielle</span>
+    </div>
+    <div class="srv-card from-bottom d1 hoverable">
+      <div class="srv-n">Service 05</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M3 6l9-4 9 4v6c0 5-4 9-9 11-5-2-9-6-9-11V6z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+      <h3>Tribunal Administratif</h3>
+      <p>Recours pour excès de pouvoir ou référé-mesures utiles pour débloquer par décision de justice.</p>
+      <span class="srv-tag">Procédure Juridique</span>
+    </div>
+    <div class="srv-card from-bottom d2 hoverable">
+      <div class="srv-n">Service 06</div>
+      <div class="srv-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+      <h3>Démarches Simplifiées</h3>
+      <p>Gestion et suivi rigoureux de vos demandes sur la plateforme officielle de l'État français.</p>
+      <span class="srv-tag">Suivi Rigoureux</span>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<div class="nums-sec">
+  <div class="nums-grid-bg"></div>
+  <div class="nums-inner">
+    <div class="num-item from-bottom"><div class="num-val"><span id="n1">0</span><span class="accent">%</span></div><div class="num-lbl">Taux de Succès</div></div>
+    <div class="num-item from-bottom d1"><div class="num-val"><span id="n2">0</span><span class="accent">+</span></div><div class="num-lbl">Dossiers Débloqués</div></div>
+    <div class="num-item from-bottom d2"><div class="num-val"><span id="n3">0</span><span class="accent">j</span></div><div class="num-lbl">Réponse Moyenne</div></div>
+    <div class="num-item from-bottom d3"><div class="num-val" style="color:#fff">24<span class="accent">/7</span></div><div class="num-lbl">Support Client</div></div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="sec testi-sec" id="temoignages">
+  <div style="text-align:center;margin-bottom:8px"><span class="sec-chip from-bottom">Témoignages</span></div>
+  <h2 class="sec-title from-bottom" style="text-align:center">Ils nous ont fait <span class="txt-blue">confiance</span></h2>
+  <div class="testi-grid">
+    <div class="testi-card from-bottom hoverable">
+      <div class="testi-q">"</div>
+      <p class="testi-txt">Mon dossier ANEF était bloqué depuis 8 mois sans aucune nouvelle. Strategix m'a aidé à relancer officiellement la préfecture et j'ai enfin obtenu mon récépissé en moins de 3 semaines.</p>
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="testi-author"><div class="testi-av">AK</div><div><div class="testi-name">Ahmed K.</div><div class="testi-role">Dossier ANEF · Préfecture de Nanterre</div></div></div>
+    </div>
+    <div class="testi-card from-bottom d1 hoverable">
+      <div class="testi-q">"</div>
+      <p class="testi-txt">Grâce à l'accompagnement de Strategix, j'ai pu obtenir une réponse claire de l'administration après 7 mois de silence. Très sérieux, à l'écoute, et surtout efficace.</p>
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="testi-author"><div class="testi-av">MS</div><div><div class="testi-name">Maria S.</div><div class="testi-role">Accompagnement · Préfecture de Bobigny</div></div></div>
+    </div>
+    <div class="testi-card from-bottom d2 hoverable">
+      <div class="testi-q">"</div>
+      <p class="testi-txt">Très professionnel et rapide. L'analyse de mon dossier m'a permis de comprendre exactement pourquoi j'étais bloqué et comment agir. Résultat en 18 jours.</p>
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="testi-author"><div class="testi-av">JM</div><div><div class="testi-name">Julien M.</div><div class="testi-role">Analyse · Préfecture de Paris</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec faq-sec">
+  <span class="sec-chip from-bottom">FAQ</span>
+  <h2 class="sec-title from-bottom">Questions <span class="txt-violet">fréquentes</span></h2>
+  <div class="faq-inner">
+    <div class="faq-list from-left">
+      <div class="faq-item">
+        <div class="faq-q hoverable" onclick="toggleFaq(this)"><span>Êtes-vous un cabinet d'avocats ?</span><div class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="faq-a">Non. Strategix Assistance est un cabinet d'assistance administrative, pas un cabinet d'avocats. Nous n'exerçons pas la profession d'avocat et ne fournissons pas de conseil juridique au sens légal. Nous vous accompagnons dans vos démarches administratives.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q hoverable" onclick="toggleFaq(this)"><span>Garantissez-vous un résultat positif ?</span><div class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="faq-a">Nous ne pouvons pas garantir légalement un résultat, mais notre taux de succès de 95% parle pour nous. Nous nous engageons à mettre en œuvre tous les leviers disponibles pour débloquer votre situation dans les meilleurs délais.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q hoverable" onclick="toggleFaq(this)"><span>Combien de temps prend l'analyse ?</span><div class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="faq-a">L'analyse complète est réalisée sous 24 à 48 heures ouvrées après réception de vos documents. Vous recevez un rapport détaillé avec la stratégie recommandée.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q hoverable" onclick="toggleFaq(this)"><span>Que comprend l'analyse à 79€ exactement ?</span><div class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="faq-a">Audit complet de votre dossier ANEF, vérification de chaque document, identification précise du ou des blocages, et rapport avec stratégie personnalisée sous 48h.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q hoverable" onclick="toggleFaq(this)"><span>Puis-je me faire rembourser ?</span><div class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="faq-a">Conformément à nos CGV, une prestation d'analyse déjà réalisée ne peut pas être remboursée. Si nous n'identifions aucun levier, nous vous en informons avant toute facturation.</div>
+      </div>
+    </div>
+    <div class="faq-right from-right" style="position:relative">
+      <div class="faq-right-bg"></div>
+      <div class="faq-cta-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.5a19.79 19.79 0 0 1-3-8.59A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+      <h3>Une question spécifique ?</h3>
+      <p>Notre équipe répond à toutes vos questions dans les 2 heures ouvrées. Expliquez-nous votre situation.</p>
+      <div class="faq-contact">
+        <div class="faq-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>contact@strategix-assistance.fr</div>
+        <div class="faq-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.5a19.79 19.79 0 0 1-3-8.59A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+33 1 23 45 67 89</div>
+        <div class="faq-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>WhatsApp disponible</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="sec price-sec" id="tarifs">
+  <div style="text-align:center;margin-bottom:8px"><span class="sec-chip from-bottom">Tarification</span></div>
+  <h2 class="sec-title from-bottom" style="text-align:center">Investissez dans votre <span class="txt-violet">avenir en France</span></h2>
+  <p class="sec-sub from-bottom d1" style="text-align:center;margin:0 auto">Sans frais cachés. Tarifs fixes calculés pour maximiser vos chances de déblocage.</p>
+  <div class="price-grid">
+    <div class="price-card from-bottom hoverable">
+      <div class="pc-plan">Essentiel</div>
+      <div class="pc-name">Analyse Complète</div>
+      <div class="pc-price"><span class="pc-eur">€</span><span class="pc-num">79</span></div>
+      <div class="pc-period">Par dossier · Réponse sous 24–48h</div>
+      <div class="pc-divider"></div>
+      <ul class="pc-features">
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Audit complet dossier ANEF</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Vérification de tous les documents</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Identification précise du blocage</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Stratégie personnalisée</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Rapport détaillé sous 48h</li>
+      </ul>
+      <button class="btn-outline hoverable">Commencer →</button>
+    </div>
+    <div class="price-card feat from-bottom d1 hoverable">
+      <div class="pc-badge">Recommandé</div>
+      <div class="pc-plan">Complet</div>
+      <div class="pc-name">Pack Assistance</div>
+      <div class="pc-price"><span class="pc-eur">€</span><span class="pc-num">299</span></div>
+      <div class="pc-period">Accompagnement complet jusqu'à réponse</div>
+      <div class="pc-divider"></div>
+      <ul class="pc-features">
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Correction dossier ANEF complète</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Rédaction courriers de relance</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Assistance Démarches Simplifiées</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Saisine Défenseur des Droits</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Suivi complet jusqu'à réponse</li>
+      </ul>
+      <button class="btn-white hoverable">Débloquer mon dossier →</button>
+    </div>
+    <div class="price-card from-bottom d2 hoverable">
+      <div class="pc-plan">Juridique</div>
+      <div class="pc-name">Pack Juridique</div>
+      <div class="pc-price"><span class="pc-eur">€</span><span class="pc-num">599</span></div>
+      <div class="pc-period">Procédures contentieuses · Tribunal</div>
+      <div class="pc-divider"></div>
+      <ul class="pc-features">
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Rédaction du mémoire TA</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Procédure référé-liberté</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Suivi tribunal administratif</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Orientation avocat partenaire</li>
+        <li><span class="pc-chk"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Gestion urgence administrative</li>
+      </ul>
+      <button class="btn-outline hoverable">Commencer →</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="cta-ring r1"></div><div class="cta-ring r2"></div><div class="cta-ring r3"></div><div class="cta-ring r4"></div>
+  <h2 class="from-bottom">Ne laissez pas l'administration<br><span class="txt-blue">décider de votre avenir</span></h2>
+  <p class="from-bottom d1">Chaque jour qui passe est un jour perdu. Notre équipe est prête à agir maintenant pour vous.</p>
+  <div class="cta-btns from-bottom d2">
+    <button class="btn-primary hoverable" style="font-size:15px;padding:17px 40px">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>Analyse gratuite — 0€</span>
+    </button>
+    <button class="btn-secondary hoverable" style="font-size:14px;padding:17px 36px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+      contact@strategix-assistance.fr
+    </button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="nav-logo-mark"><svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M9 2L15 5.5V12.5L9 16L3 12.5V5.5L9 2Z"/><path d="M9 7V11M7 9H11" stroke-width="1.5"/></svg></div>
+        <div><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff">Strategix Assistance</div><div style="font-size:9px;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase">Cabinet Administratif · France</div></div>
+      </div>
+      <p>Spécialiste du déblocage administratif. Dossiers ANEF, Préfecture, Démarches Simplifiées.</p>
+    </div>
+    <div class="ft-col">
+      <h4>Services</h4>
+      <a href="#">Déblocage ANEF</a><a href="#">Rendez-vous Préfecture</a><a href="#">Recours Administratif</a><a href="#">Défenseur des Droits</a>
+    </div>
+    <div class="ft-col">
+      <h4>Informations</h4>
+      <a href="#">CGV</a><a href="#">Confidentialité RGPD</a><a href="#">Mentions Légales</a><a href="#">Témoignages</a>
+    </div>
+    <div class="ft-col">
+      <h4>Contact</h4>
+      <a href="mailto:contact@strategix-assistance.fr">contact@strategix-assistance.fr</a>
+      <a href="tel:+33123456789">+33 1 23 45 67 89</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <div class="ft-copy">© 2026 Strategix Assistance. Tous droits réservés.</div>
+    <div class="ft-disc">Cabinet d'assistance administrative. Ne fournit pas de conseil juridique au sens du droit français. Nous ne sommes pas avocats.</div>
+  </div>
+</footer>
+
+<script>
+// ── CURSOR ──
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+let mx=0,my=0,rx=window.innerWidth/2,ry=window.innerHeight/2;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function aC(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;cur2.style.left=rx+'px';cur2.style.top=ry+'px';requestAnimationFrame(aC)})();
+document.querySelectorAll('.hoverable').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+
+// ── 3D CARD ──
+const card=document.getElementById('card3d');
+let tRX=0,tRY=0,cRX=0,cRY=0;
+const heroEl=document.querySelector('.hero');
+heroEl.addEventListener('mousemove',e=>{
+  const r=heroEl.getBoundingClientRect();
+tRX=((e.clientY-r.top)/r.height-.5)*-20;
+  tRY=((e.clientX-r.left)/r.width-.5)*25;
+});
+heroEl.addEventListener('mouseleave',()=>{tRX=0;tRY=0});
+(function aC2(){cRX+=(tRX-cRX)*.08;cRY+=(tRY-cRY)*.08;if(card)card.style.transform=`rotateX(${cRX}deg) rotateY(${cRY}deg)`;requestAnimationFrame(aC2)})();
+
+// ── SCROLL REVEAL ──
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.from-left,.from-right,.from-bottom').forEach(el=>obs.observe(el));
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);
+});
+
+// ── COUNTERS ──
+function countUp(el,target,dur){
+  let v=0;const step=target/(dur/16);
+  const t=setInterval(()=>{v=Math.min(v+step,target);el.textContent=Math.round(v);if(v>=target)clearInterval(t)},16);
+}
+const nObs=new IntersectionObserver(es=>{
+  if(es[0].isIntersecting){
+    countUp(document.getElementById('n1'),95,1400);
+    countUp(document.getElementById('n2'),1500,1800);
+    countUp(document.getElementById('n3'),30,1000);
+    nObs.disconnect();
+  }
+},{threshold:.5});
+const numsEl=document.querySelector('.nums-sec');
+if(numsEl)nObs.observe(numsEl);
+
+// ── FAQ ──
+function toggleFaq(el){
+  const item=el.closest('.faq-item'),isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!isOpen)item.classList.add('open');
+}
+
+// ── MOBILE MENU ──
+function toggleMenu(){document.getElementById('mob').classList.toggle('open')}
+
+// ── BAR ANIMATE ──
+const bObs=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.fv-fill').forEach(b=>{const w=b.style.width;b.style.width='0';setTimeout(()=>{b.style.width=w},120)});
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('.feat-vis').forEach(el=>bObs.observe(el));
+
+// fix 3d card parallax syntax
+heroEl.addEventListener('mousemove',e=>{
+  const r=heroEl.getBoundingClientRect();
+  const xp=(e.clientX-r.left)/r.width-.5;
+  const yp=(e.clientY-r.top)/r.height-.5;
+  tRX=yp*-20;tRY=xp*25;
+});
+</script>
+</body>
+</html>
